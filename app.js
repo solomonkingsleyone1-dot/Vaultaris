@@ -86,3 +86,68 @@ document.querySelectorAll('.nav-links a').forEach(link => {
         menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     });
 });
+// ============================================
+// MESSAGE DEEPSEEK FUNCTIONALITY
+// ============================================
+
+// Message DeepSeek Widget
+const messageBtn = document.getElementById('messageBtn');
+const messageModal = document.getElementById('messageModal');
+const closeModal = document.querySelector('.close-modal');
+const messageForm = document.getElementById('messageForm');
+
+// Open modal
+if (messageBtn) {
+  messageBtn.addEventListener('click', () => {
+    messageModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  });
+}
+
+// Close modal
+if (closeModal) {
+  closeModal.addEventListener('click', () => {
+    messageModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  });
+}
+
+// Close if click outside modal
+window.addEventListener('click', (e) => {
+  if (e.target === messageModal) {
+    messageModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+});
+
+// Handle form submit
+if (messageForm) {
+  messageForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const textarea = messageForm.querySelector('textarea');
+    const message = textarea.value.trim();
+    
+    if (message) {
+      // In a real app, you would send this to a server
+      console.log('Message to DeepSeek:', message);
+      
+      // Show success message
+      alert('✅ Message sent to DeepSeek! We\'ll respond soon.');
+      
+      // Clear form and close modal
+      textarea.value = '';
+      messageModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    } else {
+      alert('Please type a message first.');
+    }
+  });
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && messageModal.style.display === 'flex') {
+    messageModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+});
