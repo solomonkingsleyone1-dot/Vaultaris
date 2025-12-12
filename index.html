@@ -3,80 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaultaris - Smart Investment Solutions</title>
+    <title>Vaultaris - Smart Investment</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <a href="/" class="logo">Vaultaris</a>
-                <div class="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#services">Services</a>
-                    <a href="#performance">Performance</a>
-                    <a href="#about">About</a>
-                </div>
-                <a href="#contact" class="btn-login">Get Started</a>
-            </div>
+    <nav>
+        <div class="logo">Vaultaris</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#performance">Performance</a>
+            <a href="#about">About</a>
+            <a href="#contact" class="btn">Get Started</a>
         </div>
+        <button class="menu-btn"><i class="fas fa-bars"></i></button>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Smart, Secure & Strategic Wealth Growth</h1>
-                <p>Vaultaris is a trusted investment company focused on data-driven strategies for optimal returns.</p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn-primary">Start Investing</a>
-                    <a href="#services" class="btn-secondary">Our Services</a>
-                </div>
+        <h1>Smart, Secure & Strategic Wealth Growth</h1>
+        <p>Vaultaris is a trusted investment company focused on data-driven strategies for optimal returns.</p>
+        <div class="hero-btns">
+            <a href="#contact" class="btn-primary">Start Investing</a>
+            <a href="#services" class="btn-secondary">Our Services</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Market Research</h3>
+                <p>Data-driven insights and market trend analysis.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-briefcase"></i>
+                <h3>Portfolio Management</h3>
+                <p>Customized investment strategies tailored to your financial goals.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Risk Analysis</h3>
+                <p>Advanced risk assessment for secure investment decisions.</p>
             </div>
         </div>
     </section>
 
-    <!-- Services -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2>Our Investment Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Portfolio Management</h3>
-                    <p>Customized investment strategies tailored to your financial goals.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Risk Analysis</h3>
-                    <p>Advanced risk assessment for secure investment decisions.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Market Research</h3>
-                    <p>Data-driven insights and market trend analysis.</p>
-                </div>
+    <!-- Performance Section -->
+    <section id="performance" class="section dark">
+        <h2>Performance Highlights</h2>
+        <div class="stats">
+            <div class="stat">
+                <h3>+24%</h3>
+                <p>Avg Annual Return</p>
+            </div>
+            <div class="stat">
+                <h3>5,000+</h3>
+                <p>Clients Served</p>
+            </div>
+            <div class="stat">
+                <h3>99%</h3>
+                <p>Client Satisfaction</p>
             </div>
         </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Start Your Investment Journey</h2>
-            <p>Contact us for a free consultation</p>
-            <form class="contact-form">
-                <input type="email" placeholder="Your Email" required>
-                <button type="submit" class="btn-primary">Get Started</button>
-            </form>
-        </div>
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2>Start Your Investment Journey</h2>
+        <p>Contact us for a free consultation</p>
+        <form class="contact-form">
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="btn-primary">Get Started</button>
+        </form>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Vaultaris. All rights reserved.</p>
-            <p>Investment involves risk. Past performance is not indicative of future results.</p>
+    <footer>
+        <div class="footer-content">
+            <div class="logo">Vaultaris</div>
+            <p>Smart investments for a secure future.</p>
+            <div class="social">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p class="copyright">© 2025 Vaultaris. All rights reserved.<br>
+            Investment involves risk. Past performance is not indicative of future results.</p>
         </div>
     </footer>
 
