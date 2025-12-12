@@ -62,15 +62,14 @@
                 <p>Avg Annual Return</p>
             </div>
             <div class="stat">
-                <!-- Contact Section -->
-<section id="contact" class="section">
-    <h2>Start Your Investment Journey</h2>
-    <p>Contact us for a free consultation</p>
-    <form class="contact-form">
-        <input type="email" placeholder="Your Email" required>
-        <button type="submit" class="btn-primary">Get Started</button>
-    </form>
-</section>
+                <h3>1500+</h3>
+                <p>Clients</p>
+            </div>
+            <div class="stat">
+                <h3>99.8%</h3>
+                <p>Security Uptime</p>
+            </div>
+        </div>
     </section>
 
     <!-- Contact Section -->
@@ -97,13 +96,32 @@
             Investment involves risk. Past performance is not indicative of future results.</p>
         </div>
     </footer>
+
     <!-- Back to Top Button -->
     <button id="backToTopBtn" aria-label="Scroll to top" title="Back to top">
       <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Message DeepSeek Button -->
+    <button id="messageBtn" class="message-btn">
+      <i class="fas fa-comment-dots"></i> Message DeepSeek
+    </button>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="message-modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Message DeepSeek</h3>
+        <p>How can I assist you today?</p>
+        <form id="messageForm">
+          <textarea placeholder="Type your message here..." rows="4" required></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Only ONE script file - choose either app.js or apyp.js -->
     <script src="app.js"></script>
-</body>
-    <script src="app.js"></script>
+    <!-- Remove the duplicate script if not needed -->
 </body>
 </html>
