@@ -42,3 +42,27 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+// ============================
+// BACK TO TOP BUTTON FUNCTIONALITY
+// ============================
+
+// Get the button
+const backToTopBtn = document.getElementById('backToTopBtn');
+
+// Show the button when user scrolls down 300px
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 300) {
+    backToTopBtn.style.display = 'flex';
+  } else {
+    backToTopBtn.style.display = 'none';
+  }
+});
+
+// Smooth scroll to top when clicked
+backToTopBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
