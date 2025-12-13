@@ -434,3 +434,164 @@ function updateLiveMetrics() {
 
 // Initialize dashboard when page loads
 document.addEventListener('DOMContentLoaded', initDashboard);
+// ===== CONTACT FORM FUNCTIONALITY =====
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    // Form elements
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const messageInput = document.getElementById('message');
+    const submitBtn = contactForm.querySelector('.btn-submit');
+    const btnText = contactForm.querySelector('.btn-text');
+    const btnLoader = contactForm.querySelector('.btn-loader');
+    const formMessage = document.getElementById('formMessage');
+
+    // Validation patterns
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[\+]?[1-9][\d]{0,15}$/;
+
+    // Real-time validation for required fields
+    [nameInput, emailInput, messageInput].forEach(input => {
+        input.addEventListener('input', function() {
+            validateField(this);
+            updateSubmitButton();
+        });
+        
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
+    });
+
+    // Optional phone validation
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            if (this.value.trim() && !phonePattern.test(this.value.replace(/[\s\(\)\-]/g, ''))) {
+                this.style.borderColor = '#ffa502';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+    }
+
+    // Field validation
+    function validateField(field) {
+        const value = field.value.trim();
+        const errorElement = document.getElementById(field.id + 'Error');
+        
+        if (errorElement) {
+            field.classList.remove('error');
+            errorElement.textContent = '';
+
+            if (!value) {
+                field.classList.add('error');
+                errorElement.textContent = 'This field is required';
+                return false;
+            }
+
+            if (field.type === 'email' && !emailPattern.test(value)) {
+                field.classList.add('error');
+                errorElement.textContent = 'Please enter a valid email address';
+                return false;
+            }
+
+            if (field.id === 'message' && value.length < 20) {
+                field.classList.add('error');
+                errorElement.textContent = 'Please provide more details (at least 20 characters)';
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Update submit button state
+    function updateSubmitButton() {
+        const isFormValid = 
+            nameInput.value.trim() && 
+            emailInput.value.trim() && 
+            emailPattern.test(emailInput.value.trim()) && 
+            messageInput.value.trim().length >= 20;
+        
+        submitBtn.disabled = !isFormValid;
+    }
+
+    // Form submission
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Validate all required fields
+        const isNameValid = validateField(nameInput);
+        const isEmailValid = validateField(emailInput);
+        const isMessageValid = validateField(messageInput);
+        
+        if (!isNameValid || !isEmailValid || !isMessageValid) {
+            showMessage('Please fill in all required fields correctly.', 'error');
+            return;
+        }
+
+        // Show loading state
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'inline-block';
+        submitBtn.disabled = true;
+
+        // Collect form data
+        const formData = {
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            phone: phoneInput ? phoneInput.value.trim() : '',
+            message: messageInput.value.trim(),
+            investmentAmount: document.getElementById('investmentAmount').value,
+            timestamp: new Date().toISOString()
+        };
+
+        // Simulate form submission (replace with actual API call)
+        try {
+            // For demo - simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1800));
+            
+            // Success
+            showMessage('Thank you! Your consultation request has been sent. Our investment advisor will contact you within 24 hours.', 'success');
+            
+            // Log to console (for demo)
+            console.log('Form submitted:', formData);
+            
+            // Reset form
+            contactForm.reset();
+            updateSubmitButton();
+            
+            // Here you would typically:
+            // 1. Send data to your backend API
+            // 2. Use Formspree: fetch('https://formspree.io/f/your-form-id', { method: 'POST', body: JSON.stringify(formData) })
+            // 3. Use EmailJS or other email service
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showMessage('Something went wrong. Please try again or contact us directly.', 'error');
+        } finally {
+            // Reset button state
+            btnText.style.display = 'inline-block';
+            btnLoader.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Show message
+    function showMessage(text, type) {
+        formMessage.textContent = text;
+        formMessage.className = 'form-message ' + type;
+        formMessage.style.display = 'block';
+        
+        // Hide message after 6 seconds
+        setTimeout(() => {
+            if (formMessage.className.includes('success')) {
+                formMessage.style.display = 'none';
+            }
+        }, 6000);
+    }
+
+    // Initialize button state
+    updateSubmitButton();
+});
