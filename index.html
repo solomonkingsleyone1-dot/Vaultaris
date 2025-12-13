@@ -6,6 +6,8 @@
     <title>Vaultaris - Smart Investment</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js Library for Dashboard -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -72,6 +74,81 @@
         </div>
     </section>
 
+    <!-- Live Dashboard Section -->
+    <section class="dashboard-section">
+        <h2><i class="fas fa-chart-line"></i> Live Investment Dashboard</h2>
+        <p class="section-subtitle">Real-time portfolio tracking & performance analytics</p>
+        
+        <div class="dashboard-wrapper">
+            <div class="chart-container">
+                <canvas id="growthChart"></canvas>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Today's Gain</h4>
+                        <p class="metric-value positive">+1.24%</p>
+                        <p class="metric-change">+$15,280</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Weekly Return</h4>
+                        <p class="metric-value positive">+5.82%</p>
+                        <p class="metric-change">+$68,450</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Portfolio Value</h4>
+                        <p class="metric-value">$1.24M</p>
+                        <p class="metric-change">All-time high</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Risk Level</h4>
+                        <p class="metric-value neutral">Medium</p>
+                        <p class="metric-change">Optimized</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-allocation">
+                <h4><i class="fas fa-pie-chart"></i> Portfolio Allocation</h4>
+                <div class="allocation-chart">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+                <div class="allocation-legends">
+                    <div class="legend-item"><span class="legend-color tech"></span> Tech Stocks (42%)</div>
+                    <div class="legend-item"><span class="legend-color crypto"></span> Cryptocurrency (28%)</div>
+                    <div class="legend-item"><span class="legend-color realestate"></span> Real Estate (18%)</div>
+                    <div class="legend-item"><span class="legend-color bonds"></span> Bonds (12%)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-note">
+            <p><i class="fas fa-info-circle"></i> Data updates every 15 minutes. Actual client dashboards include real-time tracking.</p>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact" class="section">
         <h2>Start Your Investment Journey</h2>
@@ -119,45 +196,47 @@
         </form>
       </div>
     </div>
-<!-- DeepThink Search Button -->
-<button id="searchBtn" class="search-btn" title="DeepThink Search">
-  <i class="fas fa-search"></i> DeepThink Search
-</button>
 
-<!-- Search Modal -->
-<div id="searchModal" class="search-modal">
-  <div class="search-modal-content">
-    <span class="close-search">&times;</span>
-    <h3><i class="fas fa-brain"></i> DeepThink Search</h3>
-    <p class="search-subtitle">AI-powered search for smarter results</p>
-    
-    <div class="search-input-container">
-      <input type="text" id="searchInput" placeholder="What are you looking for? (e.g., investment strategies, risk analysis, returns...)">
-      <button id="searchSubmit" class="search-submit-btn">
-        <i class="fas fa-search"></i>
-      </button>
-    </div>
-    
-    <div class="search-results" id="searchResults">
-      <!-- Results will appear here -->
-      <div class="initial-message">
-        <p><i class="fas fa-lightbulb"></i> Try searching for: <span class="search-tags">"portfolio management"</span>, <span class="search-tags">"market research"</span>, <span class="search-tags">"investment returns"</span></p>
+    <!-- DeepThink Search Button -->
+    <button id="searchBtn" class="search-btn" title="DeepThink Search">
+      <i class="fas fa-search"></i> DeepThink Search
+    </button>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="search-modal">
+      <div class="search-modal-content">
+        <span class="close-search">&times;</span>
+        <h3><i class="fas fa-brain"></i> DeepThink Search</h3>
+        <p class="search-subtitle">AI-powered search for smarter results</p>
+        
+        <div class="search-input-container">
+          <input type="text" id="searchInput" placeholder="What are you looking for? (e.g., investment strategies, risk analysis, returns...)">
+          <button id="searchSubmit" class="search-submit-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        
+        <div class="search-results" id="searchResults">
+          <!-- Results will appear here -->
+          <div class="initial-message">
+            <p><i class="fas fa-lightbulb"></i> Try searching for: <span class="search-tags">"portfolio management"</span>, <span class="search-tags">"market research"</span>, <span class="search-tags">"investment returns"</span></p>
+          </div>
+        </div>
+        
+        <div class="search-suggestions">
+          <h4>Quick Suggestions:</h4>
+          <div class="suggestion-tags">
+            <button class="suggestion-tag" data-search="portfolio">Portfolio Management</button>
+            <button class="suggestion-tag" data-search="risk">Risk Analysis</button>
+            <button class="suggestion-tag" data-search="returns">Investment Returns</button>
+            <button class="suggestion-tag" data-search="strategies">Trading Strategies</button>
+          </div>
+        </div>
       </div>
     </div>
-    
-    <div class="search-suggestions">
-      <h4>Quick Suggestions:</h4>
-      <div class="suggestion-tags">
-        <button class="suggestion-tag" data-search="portfolio">Portfolio Management</button>
-        <button class="suggestion-tag" data-search="risk">Risk Analysis</button>
-        <button class="suggestion-tag" data-search="returns">Investment Returns</button>
-        <button class="suggestion-tag" data-search="strategies">Trading Strategies</button>
-      </div>
-    </div>
-  </div>
-</div>
+
     <!-- Only ONE script file - choose either app.js or apyp.js -->
     <script src="app.js"></script>
     <!-- Remove the duplicate script if not needed -->
 </body>
-</html>
+    </html>
