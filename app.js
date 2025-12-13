@@ -43,19 +43,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================
-// CONTACT FORM
-// ============================
-const form = document.querySelector('.contact-form');
-if (form) {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = form.querySelector('input').value;
-        alert(`Thank you! We'll contact you at ${email} soon.`);
-        form.reset();
-    });
-}
-
-// ============================
 // BACK TO TOP BUTTON
 // ============================
 const backToTopBtn = document.getElementById('backToTopBtn');
@@ -434,10 +421,18 @@ function updateLiveMetrics() {
 
 // Initialize dashboard when page loads
 document.addEventListener('DOMContentLoaded', initDashboard);
-// ===== CONTACT FORM FUNCTIONALITY =====
+
+// ============================
+// ENHANCED CONTACT FORM
+// ============================
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
+    if (!contactForm) {
+        console.log('Contact form not found - skipping enhanced form initialization');
+        return;
+    }
+
+    console.log('Initializing enhanced contact form...');
 
     // Form elements
     const nameInput = document.getElementById('name');
@@ -453,16 +448,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const phonePattern = /^[\+]?[1-9][\d]{0,15}$/;
 
     // Real-time validation for required fields
-    [nameInput, emailInput, messageInput].forEach(input => {
-        input.addEventListener('input', function() {
-            validateField(this);
-            updateSubmitButton();
+    if (nameInput && emailInput && messageInput) {
+        [nameInput, emailInput, messageInput].forEach(input => {
+            input.addEventListener('input', function() {
+                validateField(this);
+                updateSubmitButton();
+            });
+            
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
         });
-        
-        input.addEventListener('blur', function() {
-            validateField(this);
-        });
-    });
+    }
 
     // Optional phone validation
     const phoneInput = document.getElementById('phone');
@@ -509,6 +506,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update submit button state
     function updateSubmitButton() {
+        if (!nameInput || !emailInput || !messageInput || !submitBtn) return;
+        
         const isFormValid = 
             nameInput.value.trim() && 
             emailInput.value.trim() && 
@@ -522,6 +521,8 @@ document.addEventListener('DOMContentLoaded', function() {
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        console.log('Form submission started...');
+        
         // Validate all required fields
         const isNameValid = validateField(nameInput);
         const isEmailValid = validateField(emailInput);
@@ -533,8 +534,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Show loading state
-        btnText.style.display = 'none';
-        btnLoader.style.display = 'inline-block';
+        if (btnText && btnLoader) {
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline-block';
+        }
         submitBtn.disabled = true;
 
         // Collect form data
@@ -543,12 +546,14 @@ document.addEventListener('DOMContentLoaded', function() {
             email: emailInput.value.trim(),
             phone: phoneInput ? phoneInput.value.trim() : '',
             message: messageInput.value.trim(),
-            investmentAmount: document.getElementById('investmentAmount').value,
+            investmentAmount: document.getElementById('investmentAmount') ? document.getElementById('investmentAmount').value : '',
             timestamp: new Date().toISOString()
         };
 
         // Simulate form submission (replace with actual API call)
         try {
+            console.log('Submitting form data:', formData);
+            
             // For demo - simulate API call
             await new Promise(resolve => setTimeout(resolve, 1800));
             
@@ -556,30 +561,29 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Thank you! Your consultation request has been sent. Our investment advisor will contact you within 24 hours.', 'success');
             
             // Log to console (for demo)
-            console.log('Form submitted:', formData);
+            console.log('Form submitted successfully:', formData);
             
             // Reset form
             contactForm.reset();
             updateSubmitButton();
-            
-            // Here you would typically:
-            // 1. Send data to your backend API
-            // 2. Use Formspree: fetch('https://formspree.io/f/your-form-id', { method: 'POST', body: JSON.stringify(formData) })
-            // 3. Use EmailJS or other email service
             
         } catch (error) {
             console.error('Form submission error:', error);
             showMessage('Something went wrong. Please try again or contact us directly.', 'error');
         } finally {
             // Reset button state
-            btnText.style.display = 'inline-block';
-            btnLoader.style.display = 'none';
+            if (btnText && btnLoader) {
+                btnText.style.display = 'inline-block';
+                btnLoader.style.display = 'none';
+            }
             submitBtn.disabled = false;
         }
     });
 
     // Show message
     function showMessage(text, type) {
+        if (!formMessage) return;
+        
         formMessage.textContent = text;
         formMessage.className = 'form-message ' + type;
         formMessage.style.display = 'block';
@@ -594,4 +598,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize button state
     updateSubmitButton();
+    console.log('Enhanced contact form initialized successfully');
 });
