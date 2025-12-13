@@ -306,3 +306,131 @@ suggestionTags.forEach(tag => {
 
 // Initialize
 showInitialMessage();
+
+// ============================================
+// LIVE DASHBOARD FUNCTIONALITY
+// ============================================
+
+function initDashboard() {
+    // Create charts if Chart.js is loaded
+    if (window.Chart) {
+        createCharts();
+    } else {
+        // Wait for Chart.js to load
+        setTimeout(initDashboard, 100);
+    }
+}
+
+function createCharts() {
+    // Growth Chart (Line Chart)
+    const growthCtx = document.getElementById('growthChart');
+    if (growthCtx) {
+        new Chart(growthCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Portfolio Value',
+                    data: [100, 115, 125, 140, 155, 180, 195, 210, 230, 250, 270, 300],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#667eea',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Allocation Chart (Doughnut Chart)
+    const allocationCtx = document.getElementById('allocationChart');
+    if (allocationCtx) {
+        new Chart(allocationCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Tech Stocks', 'Cryptocurrency', 'Real Estate', 'Bonds'],
+                datasets: [{
+                    data: [42, 28, 18, 12],
+                    backgroundColor: [
+                        '#667eea',
+                        '#10b981',
+                        '#f59e0b',
+                        '#8b5cf6'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    }
+    
+    // Update metrics with live data (simulated)
+    updateLiveMetrics();
+}
+
+function updateLiveMetrics() {
+    // Simulate live updates
+    const metrics = document.querySelectorAll('.metric-value');
+    if (metrics.length > 0) {
+        // Random small fluctuations
+        setInterval(() => {
+            const change = (Math.random() * 0.5 - 0.25).toFixed(2);
+            metrics[0].textContent = `+${(1.24 + parseFloat(change)).toFixed(2)}%`;
+            
+            // Update dollar values based on percentage
+            const dollarChange = Math.floor(Math.random() * 5000 + 500);
+            const changeElements = document.querySelectorAll('.metric-change');
+            if (changeElements[0]) {
+                changeElements[0].textContent = `+$${(15280 + dollarChange).toLocaleString()}`;
+            }
+        }, 10000); // Update every 10 seconds
+    }
+}
+
+// Initialize dashboard when page loads
+document.addEventListener('DOMContentLoaded', initDashboard);
