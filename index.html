@@ -147,20 +147,54 @@
                 </div>
             </div>
             
-            <!-- Investment Calculator Results -->
+            <!-- 7-Day Returns Calculator -->
             <div class="calculator-results" id="calculatorResults">
-                <h4><i class="fas fa-calculator"></i> Investment Projection</h4>
-                <div class="result-row">
-                    <span class="result-label">Initial Investment:</span>
-                    <span class="result-value" id="calcInitial">$50</span>
+                <h4><i class="fas fa-chart-line"></i> 7-Day Returns Calculator</h4>
+                
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="result-label">Initial Investment</span>
+                        <span class="result-value" id="calcInitial">$50</span>
+                        <span class="result-change">Starting amount</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Current Value</span>
+                        <span class="result-value" id="calcCurrent">$50.85</span>
+                        <span class="result-change">After 7 days</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">7-Day Return</span>
+                        <span class="result-value positive" id="calcReturn">+1.7%</span>
+                        <span class="result-change">Total gain</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Daily Average</span>
+                        <span class="result-value positive" id="calcDaily">+0.24%</span>
+                        <span class="result-change">Per day</span>
+                    </div>
                 </div>
-                <div class="result-row">
-                    <span class="result-label">5-Year Projection:</span>
-                    <span class="result-value" id="calcProjection">$155</span>
+                
+                <div class="daily-breakdown">
+                    <h5><i class="fas fa-calendar-week"></i> Daily Performance</h5>
+                    <div class="daily-days">
+                        <span class="day">Mon</span>
+                        <span class="day">Tue</span>
+                        <span class="day">Wed</span>
+                        <span class="day">Thu</span>
+                        <span class="day">Fri</span>
+                        <span class="day">Sat</span>
+                        <span class="day">Sun</span>
+                    </div>
+                    <div class="daily-values" id="dailyValues">
+                        <!-- Daily values will be inserted by JavaScript -->
+                    </div>
                 </div>
-                <div class="result-row">
-                    <span class="result-label">Estimated Annual Return:</span>
-                    <span class="result-value positive">+25%</span>
+                
+                <div class="performance-summary">
+                    <p><i class="fas fa-info-circle"></i> Based on Vaultaris's average 7-day return of +1.7% across all portfolios</p>
                 </div>
             </div>
         </div>
@@ -184,6 +218,17 @@
                     </div>
                     <div class="faq-answer">
                         <p>We offer flexible investment plans starting from just $50! Whether you're starting small or investing significant amounts, we provide personalized strategies tailored to your budget and goals. For optimal diversification and automated portfolio management, we recommend $500+.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>What are typical 7-day returns?</h4>
+                        <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our average 7-day return across all portfolios is +1.7%, with daily variations. Returns are calculated based on real market performance and our AI-driven strategies. Use our 7-day returns calculator to estimate potential gains for your investment amount.</p>
+                        <p><strong>Note:</strong> Past performance doesn't guarantee future results. Investment involves risk.</p>
                     </div>
                 </div>
                 
