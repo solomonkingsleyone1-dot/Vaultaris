@@ -1373,48 +1373,182 @@ nav {
     display: block;
 }
 
-/* Investment Calculator Results */
+/* ============================================
+   7-DAY RETURNS CALCULATOR
+   ============================================ */
+
 .calculator-results {
     background: #f8fafc;
     border-radius: 15px;
     padding: 25px;
     margin-top: 30px;
     display: none;
+    animation: slideInUp 0.5s ease;
 }
 
 .calculator-results.show {
     display: block;
-    animation: slideInUp 0.5s ease;
 }
 
 .calculator-results h4 {
     color: #2a4d8f;
     margin-bottom: 20px;
     font-size: 1.2rem;
-}
-
-.result-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #e1e5e9;
+    gap: 10px;
 }
 
-.result-row:last-child {
-    border-bottom: none;
-    font-weight: 600;
-    color: #2a4d8f;
-    font-size: 1.1rem;
+.calculator-results h4 i {
+    color: #ffcc00;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.result-item {
+    text-align: center;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e1e5e9;
+    transition: transform 0.3s ease;
+}
+
+.result-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .result-label {
+    display: block;
+    font-size: 12px;
     color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
 }
 
 .result-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: #1a3366;
+    margin-bottom: 5px;
+}
+
+.result-value.positive {
+    color: #10b981;
+}
+
+.result-value.negative {
+    color: #ef4444;
+}
+
+.result-change {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* Daily Returns Breakdown */
+.daily-breakdown {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e5e9;
+}
+
+.daily-breakdown h5 {
+    color: #475569;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.daily-days {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.day {
+    flex: 1;
+    text-align: center;
+    padding: 8px 5px;
+    background: #f1f5f9;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #64748b;
     font-weight: 600;
+}
+
+.daily-values {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.day-value {
+    flex: 1;
+    text-align: center;
+    padding: 8px 5px;
+    background: white;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a3366;
+    border: 1px solid #e1e5e9;
+    transition: all 0.3s ease;
+    cursor: help;
+}
+
+.day-value.positive {
+    background: #d1fae5;
+    color: #065f46;
+    border-color: #a7f3d0;
+}
+
+.day-value.negative {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.day-value:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Performance Summary */
+.performance-summary {
+    margin-top: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 10px;
+    border: 1px solid #bae6fd;
+}
+
+.performance-summary p {
+    margin: 0;
+    font-size: 13px;
+    color: #0369a1;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.performance-summary i {
+    color: #0ea5e9;
+    margin-right: 5px;
 }
 
 /* ===== LIVE DASHBOARD SECTION ===== */
@@ -1934,913 +2068,4 @@ footer {
     }
 }
 
-@-webkit-keyframes slideDown {
-    from {
-        opacity: 0;
-        -webkit-transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        -webkit-transform: translateY(0);
-    }
-}
-
-.close-search {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #a0a0a0;
-    transition: color 0.2s;
-    background: none;
-    border: none;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    padding: 0;
-}
-
-.close-search:hover {
-    color: white;
-}
-
-.search-modal-content h3 {
-    margin-top: 0;
-    font-size: 28px;
-    margin-bottom: 5px;
-    color: #4cc9f0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.search-modal-content h3 i {
-    color: #f72585;
-}
-
-.search-subtitle {
-    color: #b8b8b8;
-    margin-bottom: 30px;
-    font-size: 15px;
-}
-
-/* Search Input */
-.search-input-container {
-    position: relative;
-    margin-bottom: 30px;
-}
-
-#searchInput {
-    width: 100%;
-    padding: 18px 60px 18px 25px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(76, 201, 240, 0.3);
-    border-radius: 15px;
-    color: white;
-    font-size: 17px;
-    transition: all 0.3s;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    font-family: inherit;
-}
-
-#searchInput:focus {
-    outline: none;
-    border-color: #4cc9f0;
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
-}
-
-#searchInput::placeholder {
-    color: #888;
-}
-
-.search-submit-btn {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: linear-gradient(to right, #4361ee, #3a0ca3);
-    color: white;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    line-height: 1;
-}
-
-.search-submit-btn:hover {
-    background: linear-gradient(to right, #3a56d4, #2f0b8a);
-    transform: translateY(-50%) scale(1.05);
-}
-
-.search-submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: translateY(-50%);
-}
-
-/* Search Results */
-.search-results {
-    min-height: 200px;
-    max-height: 300px;
-    overflow-y: auto;
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 25px;
-}
-
-/* Result Count */
-.result-count {
-    color: #4cc9f0;
-    font-size: 14px;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* No Results State */
-.no-results {
-    text-align: center;
-    color: #aaa;
-    padding: 40px 20px;
-    font-size: 16px;
-}
-
-.no-results h4 {
-    color: #f72585;
-    margin-bottom: 10px;
-    font-size: 18px;
-}
-
-.no-results i {
-    color: #f72585;
-    font-size: 24px;
-    margin-bottom: 15px;
-    display: block;
-}
-
-.initial-message {
-    text-align: center;
-    color: #aaa;
-    padding: 40px 20px;
-}
-
-.initial-message i {
-    color: #f72585;
-    font-size: 24px;
-    margin-bottom: 15px;
-    display: block;
-}
-
-.search-tag, .search-tags {
-    color: #4cc9f0;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 0 5px;
-    transition: color 0.3s;
-    background: none;
-    border: none;
-    font-family: inherit;
-    font-size: inherit;
-    padding: 0;
-}
-
-.search-tag:hover, .search-tags:hover {
-    text-decoration: underline;
-    color: #38b2e0;
-}
-
-/* Individual Result Item */
-.result-item {
-    background: rgba(255, 255, 255, 0.05);
-    border-left: 4px solid #4361ee;
-    padding: 18px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    transition: all 0.3s;
-}
-
-.result-item:hover {
-    background: rgba(255, 255, 255, 0.09);
-    transform: translateX(5px);
-}
-
-.result-item h4 {
-    margin: 0 0 8px 0;
-    color: #4cc9f0;
-    font-size: 18px;
-}
-
-.result-item p {
-    margin: 0;
-    color: #ccc;
-    font-size: 15px;
-    line-height: 1.5;
-}
-
-.result-item .result-category {
-    display: inline-block;
-    background: rgba(76, 201, 240, 0.2);
-    color: #4cc9f0;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    margin-top: 10px;
-}
-
-/* Search Suggestions */
-.search-suggestions h4 {
-    color: #b8b8b8;
-    margin-bottom: 15px;
-    font-size: 16px;
-}
-
-.suggestion-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.suggestion-tag {
-    background: rgba(67, 97, 238, 0.2);
-    color: #a5b4fc;
-    border: 1px solid rgba(67, 97, 238, 0.4);
-    padding: 10px 18px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.suggestion-tag:hover {
-    background: rgba(67, 97, 238, 0.4);
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Notification Toast */
-.notification-toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #333;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    z-index: 1002;
-    opacity: 0;
-    transition: all 0.3s ease;
-    max-width: 90%;
-    text-align: center;
-}
-
-.notification-toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-
-.notification-toast.success {
-    background: #10b981;
-}
-
-.notification-toast.error {
-    background: #ef4444;
-}
-
-/* Print Styles */
-@media print {
-    .message-btn,
-    .search-btn,
-    #backToTopBtn,
-    .menu-btn,
-    .hero-btns,
-    .testimonial-controls,
-    .nav-links {
-        display: none !important;
-    }
-    
-    .message-modal,
-    .search-modal {
-        display: none !important;
-    }
-    
-    .hero {
-        background: #2a4d8f !important;
-    }
-}
-
-/* ======================
-   MOBILE RESPONSIVENESS
-   ====================== */
-
-@media (max-width: 768px) {
-    /* Navigation */
-    .menu-btn {
-        display: flex;
-    }
-    
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        padding: 20px 5%;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        z-index: 100;
-        text-align: center;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-    
-    .nav-links.active {
-        display: flex;
-    }
-    
-    .nav-links a {
-        margin: 10px 0;
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-        width: 100%;
-        display: block;
-        margin-left: 0;
-    }
-    
-    .nav-links a:last-child {
-        border-bottom: none;
-    }
-    
-    .nav-links li {
-        display: block;
-        width: 100%;
-    }
-    
-    /* General Responsive */
-    .hero h1 {
-        font-size: 1.8rem;
-    }
-    
-    .hero p {
-        font-size: 1rem;
-    }
-    
-    .section h2 {
-        font-size: 1.8rem;
-    }
-    
-    /* Services Grid */
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Stats */
-    .stats {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    /* FAQ */
-    .faq-section {
-        padding: 60px 15px;
-    }
-    
-    .faq-section h2 {
-        font-size: 2rem;
-    }
-    
-    .faq-question {
-        padding: 20px;
-    }
-    
-    .faq-question h4 {
-        font-size: 16px;
-    }
-    
-    .faq-answer {
-        padding: 0 20px;
-    }
-    
-    .faq-item.active .faq-answer {
-        padding: 0 20px 20px;
-    }
-    
-    /* Testimonials */
-    .testimonials-section {
-        padding: 60px 15px;
-    }
-    
-    .testimonials-section h2 {
-        font-size: 2rem;
-    }
-    
-    .testimonial-content {
-        padding: 30px 20px;
-    }
-    
-    .testimonial-text {
-        font-size: 1.1rem;
-    }
-    
-    .client-info {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-    
-    .client-info h4,
-    .client-details {
-        text-align: center;
-    }
-    
-    /* Contact Form */
-    .contact-form {
-        padding: 30px 25px;
-    }
-    
-    .contact-section h2 {
-        font-size: 2rem;
-    }
-    
-    .contact-section {
-        padding: 60px 15px;
-    }
-    
-    /* Dashboard */
-    .metrics-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .chart-container {
-        height: 250px;
-    }
-    
-    .allocation-legends {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-wrapper {
-        padding: 1.5rem;
-    }
-    
-    /* Buttons */
-    .btn-submit {
-        padding: 16px 24px;
-        font-size: 16px;
-    }
-    
-    /* Investment Form */
-    .investment-form-wrapper {
-        margin: 0 15px;
-    }
-    
-    .form-body {
-        padding: 30px 25px;
-    }
-    
-    .form-header {
-        padding: 25px;
-    }
-    
-    .form-header h1 {
-        font-size: 1.7rem;
-    }
-    
-    .form-footer {
-        padding: 20px 25px;
-    }
-    
-    .preset-buttons {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .submit-btn {
-        padding: 18px;
-        font-size: 1rem;
-    }
-    
-    /* Message and Search Buttons */
-    .message-btn {
-        bottom: 80px;
-        right: 15px;
-        padding: 10px 16px;
-        font-size: 15px;
-    }
-    
-    .search-btn {
-        bottom: 150px;
-        right: 15px;
-        padding: 10px 16px;
-        font-size: 15px;
-    }
-    
-    .search-modal {
-        padding-top: 30px;
-        align-items: flex-start;
-    }
-    
-    .search-modal-content {
-        padding: 25px 20px;
-        width: 95%;
-        max-height: 85vh;
-        overflow-y: auto;
-        margin: 20px auto;
-    }
-    
-    /* Back to Top */
-    #backToTopBtn {
-        bottom: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-    }
-    
-    /* Modal adjustments */
-    .modal-content {
-        padding: 25px 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-btns {
-        flex-direction: column;
-    }
-    
-    .btn-primary, .btn-secondary {
-        width: 100%;
-        max-width: 250px;
-    }
-    
-    .contact-form {
-        padding: 25px 20px;
-    }
-    
-    .contact-section h2 {
-        font-size: 1.8rem;
-    }
-    
-    /* Investment Form */
-    .form-body {
-        padding: 25px 20px;
-    }
-    
-    .form-header {
-        padding: 20px;
-    }
-    
-    .form-header h1 {
-        font-size: 1.5rem;
-    }
-    
-    #investmentAmount {
-        padding: 16px 20px 16px 45px;
-        font-size: 1.2rem;
-    }
-    
-    .preset-buttons {
-        grid-template-columns: 1fr;
-    }
-    
-    .submit-btn {
-        padding: 16px;
-        font-size: 0.95rem;
-    }
-    
-    .consultation-cta h3 {
-        font-size: 1.2rem;
-    }
-    
-    /* Message and Search Buttons */
-    .message-btn {
-        bottom: 70px;
-        right: 10px;
-        padding: 9px 14px;
-        font-size: 14px;
-    }
-    
-    .message-btn span {
-        display: none;
-    }
-    
-    .message-btn i {
-        font-size: 18px;
-        margin: 0;
-    }
-    
-    .message-btn::after {
-        content: "Message";
-        font-size: 12px;
-        position: absolute;
-        bottom: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
-        color: #6a11cb;
-    }
-    
-    .search-btn {
-        bottom: 140px;
-        right: 10px;
-        padding: 9px 14px;
-        font-size: 14px;
-    }
-    
-    .search-btn span {
-        display: none;
-    }
-    
-    .search-btn i {
-        font-size: 18px;
-    }
-    
-    .search-btn::after {
-        content: "Search";
-        font-size: 12px;
-        position: absolute;
-        bottom: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
-        color: #11998e;
-    }
-    
-    #searchInput {
-        padding: 15px 50px 15px 20px;
-        font-size: 16px;
-    }
-    
-    .suggestion-tag {
-        padding: 8px 14px;
-        font-size: 13px;
-    }
-    
-    .testimonial-controls {
-        gap: 10px;
-    }
-    
-    .prev-btn, .next-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-    
-    .stats h3 {
-        font-size: 2rem;
-    }
-    
-    .metric-value {
-        font-size: 1.5rem;
-    }
-    
-    .service-card {
-        padding: 1.5rem;
-    }
-}
-
-/* Tablet & Desktop */
-@media (min-width: 769px) {
-    .nav-links {
-        display: flex;
-    }
-    
-    .menu-btn {
-        display: none;
-    }
-    
-    .hero-btns {
-        flex-direction: row;
-        justify-content: center;
-        gap: 1.5rem;
-    }
-    
-    .services-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .stats {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    /* Fix for larger screens */
-    .message-btn,
-    .search-btn {
-        right: 30px;
-    }
-    
-    .search-modal {
-        align-items: center;
-        padding-top: 0;
-    }
-    
-    .search-modal-content {
-        margin: auto;
-    }
-}
-
-/* Large Desktop */
-@media (min-width: 1200px) {
-    .container {
-        padding: 0;
-    }
-    
-    nav {
-        padding: 1.5rem 0;
-    }
-    
-    .hero {
-        padding: 5rem 0;
-    }
-    
-    .section {
-        padding: 4rem 0;
-    }
-    
-    .dashboard-section,
-    .testimonials-section,
-    .faq-section,
-    .contact-section {
-        padding: 5rem 0;
-    }
-}
-
-/* High-DPI Screens */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .hero {
-        background: linear-gradient(135deg, #2a4d8f, #1a3366);
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-submit {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-    
-    .btn-primary:hover,
-    .btn-secondary:hover,
-    .service-card:hover,
-    .metric-card:hover,
-    .result-item:hover {
-        transform: none !important;
-    }
-    
-    .message-modal,
-    .search-modal,
-    .modal-content,
-    .search-modal-content {
-        animation: none !important;
-    }
-}
-
-/* Accessibility improvements */
-@media (prefers-contrast: high) {
-    .btn-primary {
-        border: 3px solid #333;
-    }
-    
-    .btn-secondary {
-        border: 3px solid white;
-    }
-    
-    .section h2 {
-        text-decoration: underline;
-    }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    body {
-        background: #121212;
-        color: #e0e0e0;
-    }
-    
-    .service-card,
-    .testimonial-content,
-    .contact-form,
-    .dashboard-wrapper,
-    .investment-form-wrapper {
-        background: #1e1e1e;
-        color: #e0e0e0;
-    }
-    
-    .nav-links a,
-    .section h2,
-    .metric-content h4,
-    .faq-question h4 {
-        color: #e0e0e0;
-    }
-    
-    .form-group input,
-    .form-group textarea,
-    .form-group select,
-    #investmentAmount {
-        background: #2d2d2d;
-        color: #e0e0e0;
-        border-color: #444;
-    }
-    
-    .form-group label {
-        color: #e0e0e0;
-    }
-    
-    .faq-item,
-    .metric-card {
-        border-color: #444;
-    }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .nav-links a.btn:hover,
-    .btn-primary:hover,
-    .btn-secondary:hover,
-    .service-card:hover,
-    .metric-card:hover {
-        transform: none;
-    }
-    
-    .menu-btn,
-    .prev-btn,
-    .next-btn,
-    .dot,
-    .message-btn,
-    .search-btn,
-    #backToTopBtn,
-    .suggestion-tag {
-        min-height: 44px;
-        min-width: 44px;
-    }
-    
-    .faq-question {
-        min-height: 60px;
-    }
-}
-
-/* Very small screens */
-@media (max-width: 320px) {
-    .logo {
-        font-size: 1.4rem;
-    }
-    
-    .hero h1 {
-        font-size: 1.5rem;
-    }
-    
-    .section h2 {
-        font-size: 1.5rem;
-    }
-    
-    .btn-primary, .btn-secondary {
-        width: 100%;
-        padding: 0.8rem 1.5rem;
-    }
-}
-
-/* Accessibility Focus Styles */
-*:focus {
-    outline: 2px solid #3a86ff;
-    outline-offset: 2px;
-}
-
-*:focus:not(.focus-visible) {
-    outline: none;
-                                }
+@
