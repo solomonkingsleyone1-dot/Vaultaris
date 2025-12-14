@@ -1,3 +1,19 @@
+
+// ============================
+// UTILITY FUNCTIONS
+// ============================
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // ============================
 // MOBILE MENU TOGGLE
 // ============================
@@ -48,7 +64,7 @@ function updateActiveNavLink() {
     });
 }
 
-window.addEventListener('scroll', updateActiveNavLink);
+window.addEventListener('scroll', debounce(updateActiveNavLink, 100));
 
 // ============================
 // SCROLL PROGRESS INDICATOR
@@ -368,6 +384,203 @@ if (suggestionTags.length > 0) {
 showInitialMessage();
 
 // ============================================
+// INVESTMENT LAUNCHPAD FUNCTIONALITY - NEW
+// ============================================
+function initInvestmentLaunchpad() {
+    // Amount Presets
+    const amountPresets = document.querySelectorAll('.amount-preset');
+    const customAmountInput = document.getElementById('customAmount');
+    const summaryAmount = document.getElementById('summaryAmount');
+    const summaryProjection = document.getElementById('summaryProjection');
+    const calcInitial = document.getElementById('calcInitial');
+    const calcCurrent = document.getElementById('calcCurrent');
+    const calcReturn = document.getElementById('calcReturn');
+    const calcDaily = document.getElementById('calcDaily');
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    const strategyOptions = document.querySelectorAll('.strategy-option');
+    const summaryStrategy = document.getElementById('summaryStrategy');
+    const summaryReturns = document.getElementById('summaryReturns');
+    const startInvestmentBtn = document.getElementById('startInvestmentBtn');
+    const investmentModal = document.getElementById('investmentModal');
+    const closeModalBtn = document.querySelector('.close-modal');
+    const closeModalBtn2 = document.getElementById('closeModalBtn');
+    const modalAmount = document.getElementById('modalAmount');
+    const modalStrategy = document.getElementById('modalStrategy');
+    const modalReturn = document.getElementById('modalReturn');
+    const modalTotal = document.getElementById('modalTotal');
+    const modalRef = document.getElementById('modalRef');
+
+    let selectedAmount = 500;
+    let selectedStrategy = 'conservative';
+    let selectedPeriod = '7';
+
+    // Investment returns by strategy (annual)
+    const strategyReturns = {
+        conservative: { daily: 0.242, annual: 8.5, risk: 'low' },
+        balanced: { daily: 0.386, annual: 14.0, risk: 'medium' },
+        aggressive: { daily: 0.548, annual: 20.0, risk: 'high' }
+    };
+
+    // Initialize
+    updateInvestmentSummary();
+
+    // Amount presets
+    if (amountPresets.length > 0) {
+        amountPresets.forEach(preset => {
+            preset.addEventListener('click', () => {
+                amountPresets.forEach(p => p.classList.remove('selected'));
+                preset.classList.add('selected');
+                selectedAmount = parseInt(preset.dataset.amount);
+                if (customAmountInput) customAmountInput.value = selectedAmount;
+                updateInvestmentSummary();
+            });
+        });
+    }
+
+    // Custom amount input
+    if (customAmountInput) {
+        customAmountInput.addEventListener('input', (e) => {
+            let value = parseInt(e.target.value) || 0;
+            if (value < 50) value = 50;
+            if (value > 1000000) value = 1000000;
+            
+            selectedAmount = value;
+            
+            // Remove selection from presets if custom amount
+            if (amountPresets.length > 0) {
+                amountPresets.forEach(p => p.classList.remove('selected'));
+            }
+            
+            updateInvestmentSummary();
+        });
+    }
+
+    // Period toggle
+    if (toggleButtons.length > 0) {
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                toggleButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                selectedPeriod = button.dataset.period;
+                updateInvestmentSummary();
+            });
+        });
+    }
+
+    // Strategy selection
+    if (strategyOptions.length > 0) {
+        strategyOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                strategyOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedStrategy = option.dataset.strategy;
+                updateInvestmentSummary();
+            });
+        });
+    }
+
+    // Update investment summary
+    function updateInvestmentSummary() {
+        const strategy = strategyReturns[selectedStrategy];
+        const days = parseInt(selectedPeriod);
+        
+        // Calculate returns based on period
+        let totalReturn, dailyReturn;
+        if (days === 7) {
+            totalReturn = strategy.daily * 7; // 7-day return
+            dailyReturn = strategy.daily;
+        } else if (days === 30) {
+            totalReturn = (strategy.annual / 365) * 30; // 30-day return
+            dailyReturn = strategy.annual / 365;
+        } else { // 365 days (1 year)
+            totalReturn = strategy.annual;
+            dailyReturn = strategy.annual / 365;
+        }
+        
+        const projectedValue = selectedAmount * (1 + totalReturn/100);
+        
+        // Update summary
+        if (summaryAmount) summaryAmount.textContent = `$${selectedAmount.toLocaleString()}`;
+        if (summaryStrategy) summaryStrategy.textContent = selectedStrategy.charAt(0).toUpperCase() + selectedStrategy.slice(1);
+        if (summaryReturns) summaryReturns.textContent = `+${totalReturn.toFixed(1)}%`;
+        if (summaryProjection) summaryProjection.textContent = `$${projectedValue.toFixed(2)}`;
+        
+        // Update calculator
+        if (calcInitial) calcInitial.textContent = `$${selectedAmount.toLocaleString()}`;
+        if (calcCurrent) calcCurrent.textContent = `$${projectedValue.toFixed(2)}`;
+        if (calcReturn) calcReturn.textContent = `+${totalReturn.toFixed(1)}%`;
+        if (calcDaily) calcDaily.textContent = `+${dailyReturn.toFixed(2)}%`;
+        
+        // Enable/disable start button
+        if (startInvestmentBtn) {
+            startInvestmentBtn.disabled = selectedAmount < 50;
+        }
+    }
+
+    // Start investment
+    if (startInvestmentBtn) {
+        startInvestmentBtn.addEventListener('click', () => {
+            if (selectedAmount < 50) {
+                showNotification('Minimum investment amount is $50', 'error');
+                return;
+            }
+            
+            // Show modal with details
+            if (modalAmount) modalAmount.textContent = `$${selectedAmount.toLocaleString()}`;
+            if (modalStrategy) modalStrategy.textContent = selectedStrategy.charAt(0).toUpperCase() + selectedStrategy.slice(1);
+            
+            const strategy = strategyReturns[selectedStrategy];
+            const totalReturn = strategy.daily * 7;
+            const projectedValue = selectedAmount * (1 + totalReturn/100);
+            
+            if (modalReturn) modalReturn.textContent = `+${totalReturn.toFixed(1)}%`;
+            if (modalTotal) modalTotal.textContent = `$${projectedValue.toFixed(2)}`;
+            if (modalRef) modalRef.textContent = `VLT-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+            
+            if (investmentModal) {
+                investmentModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Send investment data to server (simulated)
+            setTimeout(() => {
+                showNotification(`✅ Investment of $${selectedAmount} started successfully!`, 'success');
+            }, 500);
+        });
+    }
+
+    // Close modal
+    function closeInvestmentModal() {
+        if (investmentModal) {
+            investmentModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeInvestmentModal);
+    }
+
+    if (closeModalBtn2) {
+        closeModalBtn2.addEventListener('click', closeInvestmentModal);
+    }
+
+    // Close modal on outside click
+    window.addEventListener('click', (e) => {
+        if (e.target === investmentModal) {
+            closeInvestmentModal();
+        }
+    });
+
+    // Escape key to close modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && investmentModal && investmentModal.style.display === 'flex') {
+            closeInvestmentModal();
+        }
+    });
+}
+
+// ============================================
 // LIVE DASHBOARD FUNCTIONALITY
 // ============================================
 
@@ -515,33 +728,60 @@ function updateLiveMetrics() {
     }
 }
 
-// Investment Calculator
+// Investment Calculator - FIXED VERSION
 function initInvestmentCalculator() {
     const investmentSelect = document.getElementById('investmentAmount');
     const calculatorResults = document.getElementById('calculatorResults');
     const calcInitial = document.getElementById('calcInitial');
-    const calcProjection = document.getElementById('calcProjection');
+    const calcCurrent = document.getElementById('calcCurrent');
+    const calcReturn = document.getElementById('calcReturn');
+    const calcDaily = document.getElementById('calcDaily');
+    const dailyValues = document.getElementById('dailyValues');
     
     if (investmentSelect && calculatorResults) {
         investmentSelect.addEventListener('change', function() {
             const value = parseFloat(this.value);
             if (!isNaN(value) && value > 0) {
-                // Calculate 5-year projection with 25% annual return
-                const projection = Math.round(value * Math.pow(1.25, 5));
+                // Calculate 7-day return (1.7% average)
+                const dailyReturn = 1.7 / 7; // ~0.242857% per day
+                const finalValue = value * (1 + 1.7/100);
+                const dailyGain = value * (dailyReturn/100);
                 
-                calcInitial.textContent = `$${value.toLocaleString()}`;
-                calcProjection.textContent = `$${projection.toLocaleString()}`;
+                // Update display
+                if (calcInitial) calcInitial.textContent = `$${value.toLocaleString()}`;
+                if (calcCurrent) calcCurrent.textContent = `$${finalValue.toFixed(2)}`;
+                if (calcReturn) calcReturn.textContent = `+1.7%`;
+                if (calcDaily) calcDaily.textContent = `+${dailyReturn.toFixed(2)}%`;
+                
+                // Generate daily values
+                if (dailyValues) {
+                    let dailyHTML = '';
+                    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    let currentValue = value;
+                    
+                    days.forEach(day => {
+                        const dailyChange = Math.random() * 0.5 + 0.1; // 0.1% to 0.6%
+                        currentValue = currentValue * (1 + dailyChange/100);
+                        const isPositive = Math.random() > 0.3; // 70% chance positive
+                        
+                        dailyHTML += `
+                            <div class="day-value ${isPositive ? 'positive' : 'negative'}">
+                                ${isPositive ? '+' : '-'}${dailyChange.toFixed(2)}%
+                            </div>
+                        `;
+                    });
+                    
+                    dailyValues.innerHTML = dailyHTML;
+                }
                 
                 calculatorResults.classList.add('show');
-                
-                // Show notification
-                showNotification(`💰 Projection calculated: $${value} → $${projection} in 5 years`, 'success');
+                showNotification(`7-day projection: $${value} → $${finalValue.toFixed(2)}`, 'success');
             } else {
                 calculatorResults.classList.remove('show');
             }
         });
         
-        // Initialize with default value
+        // Initialize with default
         if (investmentSelect.value) {
             investmentSelect.dispatchEvent(new Event('change'));
         }
@@ -955,6 +1195,7 @@ function initializeAllFeatures() {
     // Initialize features in order
     updateActiveNavLink(); // Initial active nav link
     initDashboard();
+    initInvestmentLaunchpad(); // NEW: Investment launchpad
     initFAQAccordion();
     initTestimonialsCarousel();
     initContactForm();
@@ -970,4 +1211,4 @@ if (document.readyState === 'loading') {
 } else {
     // DOM already loaded
     initializeAllFeatures();
-            }
+    }
