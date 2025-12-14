@@ -10,11 +10,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <!-- Navigation -->
     <nav>
         <div class="logo">Vaultaris</div>
         <div class="nav-links">
-            <a href="#home">Home</a>
+            <a href="#home" class="active">Home</a>
             <a href="#services">Services</a>
             <a href="#performance">Performance</a>
             <a href="#faq">FAQ</a>
@@ -40,7 +43,7 @@
         <div class="services-grid">
             <div class="service-card">
                 <i class="fas fa-chart-line"></i>
-                <h3>Market Research</h3>
+                <h3>Market Research <span class="tooltip">ℹ️<span class="tooltip-text">Advanced data analysis and market predictions</span></span></h3>
                 <p>Data-driven insights and market trend analysis.</p>
             </div>
             <div class="service-card">
@@ -141,6 +144,23 @@
                     <div class="legend-item"><span class="legend-color crypto"></span> Cryptocurrency (28%)</div>
                     <div class="legend-item"><span class="legend-color realestate"></span> Real Estate (18%)</div>
                     <div class="legend-item"><span class="legend-color bonds"></span> Bonds (12%)</div>
+                </div>
+            </div>
+            
+            <!-- Investment Calculator Results -->
+            <div class="calculator-results" id="calculatorResults">
+                <h4><i class="fas fa-calculator"></i> Investment Projection</h4>
+                <div class="result-row">
+                    <span class="result-label">Initial Investment:</span>
+                    <span class="result-value" id="calcInitial">$50</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">5-Year Projection:</span>
+                    <span class="result-value" id="calcProjection">$155</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Estimated Annual Return:</span>
+                    <span class="result-value positive">+25%</span>
                 </div>
             </div>
         </div>
@@ -444,6 +464,9 @@
         </div>
     </footer>
 
+    <!-- Notification Toast (hidden by default) -->
+    <div class="notification-toast" id="notificationToast"></div>
+
     <!-- Back to Top Button -->
     <button id="backToTopBtn" aria-label="Scroll to top" title="Back to top">
       <i class="fas fa-arrow-up"></i>
@@ -489,7 +512,7 @@
         <div class="search-results" id="searchResults">
           <!-- Results will appear here -->
           <div class="initial-message">
-            <p><i class="fas fa-lightbulb"></i> Try searching for: <span class="search-tags">"portfolio management"</span>, <span class="search-tags">"market research"</span>, <span class="search-tags">"investment returns"</span></p>
+            <p><i class="fas fa-lightbulb"></i> Try searching for: <button class="search-tag" data-search="portfolio">"portfolio management"</button>, <button class="search-tag" data-search="market">"market research"</button>, <button class="search-tag" data-search="risk">"risk analysis"</button></p>
           </div>
         </div>
         
