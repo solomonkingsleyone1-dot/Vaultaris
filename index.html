@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js Library for Dashboard -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Vaultaris - Smart, secure investment strategies with data-driven insights and AI-powered portfolio management.">
+    <meta name="keywords" content="investment, portfolio management, financial growth, wealth management, AI investing">
+    <meta property="og:title" content="Vaultaris - Smart Investment">
+    <meta property="og:description" content="Transform your financial future with data-driven investment strategies.">
 </head>
 <body>
     <!-- Scroll Progress Indicator -->
@@ -19,6 +24,7 @@
         <div class="nav-links">
             <a href="#home" class="active">Home</a>
             <a href="#services">Services</a>
+            <a href="#invest">Invest Now</a> <!-- NEW LINK -->
             <a href="#performance">Performance</a>
             <a href="#faq">FAQ</a>
             <a href="#testimonials">Testimonials</a>
@@ -32,7 +38,7 @@
         <h1>Smart, Secure & Strategic Wealth Growth</h1>
         <p>Vaultaris is a trusted investment company focused on data-driven strategies for optimal returns.</p>
         <div class="hero-btns">
-            <a href="#contact" class="btn-primary">Start Investing</a>
+            <a href="#invest" class="btn-primary">Start Investing Now</a> <!-- Updated to go to invest section -->
             <a href="#services" class="btn-secondary">Our Services</a>
         </div>
     </section>
@@ -58,6 +64,208 @@
             </div>
         </div>
     </section>
+
+    <!-- ============================================
+         INVESTMENT LAUNCHPAD SECTION - Where visitors start investing
+         ============================================ -->
+    <section id="invest" class="investment-launchpad">
+        <div class="container">
+            <h2>Start Investing Today</h2>
+            <p class="subtitle">Begin your wealth-building journey in just 3 simple steps</p>
+            
+            <div class="investment-steps">
+                <div class="investment-step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon"><i class="fas fa-calculator"></i></div>
+                    <h3>Choose Your Amount</h3>
+                    <p>Start with as little as $50. Select an investment amount that fits your budget and goals.</p>
+                </div>
+                
+                <div class="investment-step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Select Strategy</h3>
+                    <p>Choose from our AI-powered investment strategies based on your risk tolerance and goals.</p>
+                </div>
+                
+                <div class="investment-step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Start Earning</h3>
+                    <p>Watch your investment grow with real-time tracking and daily performance updates.</p>
+                </div>
+            </div>
+            
+            <!-- Quick Investment Calculator -->
+            <div class="quick-investment-calculator">
+                <div class="calculator-header">
+                    <h3>Investment Calculator</h3>
+                    <div class="calculator-toggle">
+                        <button class="toggle-btn active" data-period="7">7 Days</button>
+                        <button class="toggle-btn" data-period="30">30 Days</button>
+                        <button class="toggle-btn" data-period="365">1 Year</button>
+                    </div>
+                </div>
+                
+                <div class="investment-amount-selector">
+                    <h4>Select Investment Amount</h4>
+                    <div class="amount-presets-quick">
+                        <div class="amount-preset" data-amount="50">
+                            <div class="amount">$50</div>
+                            <div class="label">Beginner</div>
+                        </div>
+                        <div class="amount-preset" data-amount="200">
+                            <div class="amount">$200</div>
+                            <div class="label">Starter</div>
+                        </div>
+                        <div class="amount-preset selected" data-amount="500">
+                            <div class="amount">$500</div>
+                            <div class="label">Standard</div>
+                        </div>
+                        <div class="amount-preset" data-amount="1000">
+                            <div class="amount">$1,000</div>
+                            <div class="label">Premium</div>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-amount">
+                        <span class="currency">$</span>
+                        <input type="number" id="customAmount" placeholder="Custom amount" min="50" max="1000000">
+                    </div>
+                </div>
+                
+                <!-- Strategy Selector -->
+                <div class="strategy-selector">
+                    <h4>Choose Investment Strategy</h4>
+                    <div class="strategy-options">
+                        <div class="strategy-option selected" data-strategy="conservative">
+                            <div class="strategy-icon"><i class="fas fa-shield-alt"></i></div>
+                            <h4>Conservative</h4>
+                            <p>Low-risk, steady growth with 8-12% annual returns</p>
+                            <span class="strategy-risk low">Low Risk</span>
+                        </div>
+                        
+                        <div class="strategy-option" data-strategy="balanced">
+                            <div class="strategy-icon"><i class="fas fa-balance-scale"></i></div>
+                            <h4>Balanced</h4>
+                            <p>Medium-risk growth with 15-20% annual returns</p>
+                            <span class="strategy-risk medium">Medium Risk</span>
+                        </div>
+                        
+                        <div class="strategy-option" data-strategy="aggressive">
+                            <div class="strategy-icon"><i class="fas fa-chart-line"></i></div>
+                            <h4>Aggressive</h4>
+                            <p>High-risk growth with 20-30% annual returns</p>
+                            <span class="strategy-risk high">High Risk</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Investment Summary -->
+                <div class="investment-summary">
+                    <h4><i class="fas fa-file-invoice-dollar"></i> Investment Summary</h4>
+                    <div class="summary-details">
+                        <div class="summary-item">
+                            <span class="summary-label">Investment Amount:</span>
+                            <span class="summary-value" id="summaryAmount">$500</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Strategy:</span>
+                            <span class="summary-value" id="summaryStrategy">Conservative</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Estimated Returns (7 days):</span>
+                            <span class="summary-value positive" id="summaryReturns">+1.7%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Projected Value:</span>
+                            <span class="summary-value" id="summaryProjection">$508.50</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calculator Results -->
+                <div class="calculator-results">
+                    <h4><i class="fas fa-chart-line"></i> 7-Day Projection</h4>
+                    
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <span class="result-label">Initial Investment</span>
+                            <span class="result-value" id="calcInitial">$500</span>
+                            <span class="result-change">Starting amount</span>
+                        </div>
+                        
+                        <div class="result-item">
+                            <span class="result-label">After 7 Days</span>
+                            <span class="result-value" id="calcCurrent">$508.50</span>
+                            <span class="result-change">Projected value</span>
+                        </div>
+                        
+                        <div class="result-item">
+                            <span class="result-label">7-Day Return</span>
+                            <span class="result-value positive" id="calcReturn">+1.7%</span>
+                            <span class="result-change">Total gain</span>
+                        </div>
+                        
+                        <div class="result-item">
+                            <span class="result-label">Daily Average</span>
+                            <span class="result-value positive" id="calcDaily">+0.24%</span>
+                            <span class="result-change">Per day</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="start-investment-btn" id="startInvestmentBtn">
+                    <i class="fas fa-rocket"></i> Start Investing Now
+                </button>
+            </div>
+            
+            <p class="performance-summary">
+                <i class="fas fa-info-circle"></i> Based on Vaultaris's average performance. Past performance doesn't guarantee future results. Investment involves risk.
+            </p>
+        </div>
+    </section>
+
+    <!-- Investment Success Modal -->
+    <div id="investmentModal" class="investment-modal">
+        <div class="investment-modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3>Investment Started Successfully!</h3>
+            <p>Congratulations! Your investment has been initiated. Our team will contact you within 24 hours to complete the setup.</p>
+            
+            <div class="modal-details">
+                <div class="modal-detail-item">
+                    <span>Investment Amount:</span>
+                    <span id="modalAmount">$500</span>
+                </div>
+                <div class="modal-detail-item">
+                    <span>Strategy:</span>
+                    <span id="modalStrategy">Conservative</span>
+                </div>
+                <div class="modal-detail-item">
+                    <span>Projected 7-Day Return:</span>
+                    <span id="modalReturn" class="positive">+1.7%</span>
+                </div>
+                <div class="modal-detail-item">
+                    <span>Reference ID:</span>
+                    <span id="modalRef">VLT-2025-00123</span>
+                </div>
+                <div class="modal-detail-item">
+                    <span>Total Projected Value:</span>
+                    <span id="modalTotal">$508.50</span>
+                </div>
+            </div>
+            
+            <p style="font-size: 14px; color: #666; margin-top: 20px;">
+                <i class="fas fa-envelope"></i> A confirmation email has been sent to your registered email address.
+            </p>
+            
+            <button class="close-modal-btn" id="closeModalBtn">Continue to Dashboard</button>
+        </div>
+    </div>
 
     <!-- Performance Section -->
     <section id="performance" class="section dark">
@@ -154,25 +362,25 @@
                 <div class="result-grid">
                     <div class="result-item">
                         <span class="result-label">Initial Investment</span>
-                        <span class="result-value" id="calcInitial">$50</span>
+                        <span class="result-value" id="calcInitialDashboard">$50</span>
                         <span class="result-change">Starting amount</span>
                     </div>
                     
                     <div class="result-item">
                         <span class="result-label">Current Value</span>
-                        <span class="result-value" id="calcCurrent">$50.85</span>
+                        <span class="result-value" id="calcCurrentDashboard">$50.85</span>
                         <span class="result-change">After 7 days</span>
                     </div>
                     
                     <div class="result-item">
                         <span class="result-label">7-Day Return</span>
-                        <span class="result-value positive" id="calcReturn">+1.7%</span>
+                        <span class="result-value positive" id="calcReturnDashboard">+1.7%</span>
                         <span class="result-change">Total gain</span>
                     </div>
                     
                     <div class="result-item">
                         <span class="result-label">Daily Average</span>
-                        <span class="result-value positive" id="calcDaily">+0.24%</span>
+                        <span class="result-value positive" id="calcDailyDashboard">+0.24%</span>
                         <span class="result-change">Per day</span>
                     </div>
                 </div>
@@ -575,4 +783,4 @@
 
     <script src="app.js"></script>
 </body>
-    </html>
+        </html>
