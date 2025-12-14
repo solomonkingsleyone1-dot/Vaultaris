@@ -4,20 +4,22 @@
 const menuBtn = document.querySelector('.menu-btn');
 const navLinks = document.querySelector('.nav-links');
 
-menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    menuBtn.innerHTML = navLinks.classList.contains('active') 
-        ? '<i class="fas fa-times"></i>' 
-        : '<i class="fas fa-bars"></i>';
-});
-
-// Close menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        menuBtn.innerHTML = navLinks.classList.contains('active') 
+            ? '<i class="fas fa-times"></i>' 
+            : '<i class="fas fa-bars"></i>';
     });
-});
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+    });
+}
 
 // ============================
 // SMOOTH SCROLL
@@ -34,7 +36,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth'
             });
             // Close mobile menu if open
-            if(window.innerWidth < 768) {
+            if(window.innerWidth < 768 && navLinks) {
                 navLinks.classList.remove('active');
                 menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             }
@@ -283,15 +285,17 @@ if (searchInput) {
 }
 
 // Suggestion tags
-suggestionTags.forEach(tag => {
-    tag.addEventListener('click', () => {
-        const searchTerm = tag.getAttribute('data-search');
-        searchInput.value = searchTerm;
-        performSearch(searchTerm);
+if (suggestionTags.length > 0) {
+    suggestionTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            const searchTerm = tag.getAttribute('data-search');
+            searchInput.value = searchTerm;
+            performSearch(searchTerm);
+        });
     });
-});
+}
 
-// Initialize
+// Initialize search
 showInitialMessage();
 
 // ============================================
@@ -419,25 +423,180 @@ function updateLiveMetrics() {
     }
 }
 
-// Initialize dashboard when page loads
-document.addEventListener('DOMContentLoaded', initDashboard);
+// ============================
+// FAQ ACCORDION FUNCTIONALITY
+// ============================
+function initFAQAccordion() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    if (faqItems.length > 0) {
+        console.log('Initializing FAQ accordion...');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            
+            question.addEventListener('click', () => {
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                        const otherAnswer = otherItem.querySelector('.faq-answer');
+                        if (otherAnswer) {
+                            otherAnswer.style.maxHeight = null;
+                        }
+                    }
+                });
+                
+                // Toggle current item
+                const isActive = item.classList.contains('active');
+                item.classList.toggle('active');
+                
+                if (answer) {
+                    if (!isActive) {
+                        // Opening
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                    } else {
+                        // Closing
+                        answer.style.maxHeight = null;
+                    }
+                }
+            });
+        });
+        
+        // Auto-open first question
+        if (faqItems.length > 0) {
+            faqItems[0].classList.add('active');
+            const firstAnswer = faqItems[0].querySelector('.faq-answer');
+            if (firstAnswer) {
+                firstAnswer.style.maxHeight = firstAnswer.scrollHeight + 'px';
+            }
+        }
+        
+        console.log('FAQ accordion initialized successfully');
+    }
+}
 
 // ============================
-// ENHANCED CONTACT FORM
+// TESTIMONIALS CAROUSEL
 // ============================
-document.addEventListener('DOMContentLoaded', function() {
+function initTestimonialsCarousel() {
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    if (slides.length === 0) return;
+    
+    let currentSlide = 0;
+    let slideInterval;
+    const slideDuration = 5000; // 5 seconds
+    
+    function showSlide(index) {
+        // Hide all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.style.display = 'none';
+        });
+        
+        // Remove active class from all dots
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Show current slide
+        if (slides[index]) {
+            slides[index].classList.add('active');
+            slides[index].style.display = 'block';
+        }
+        
+        // Activate corresponding dot
+        if (dots[index]) {
+            dots[index].classList.add('active');
+        }
+        
+        currentSlide = index;
+    }
+    
+    function nextSlide() {
+        let nextIndex = currentSlide + 1;
+        if (nextIndex >= slides.length) {
+            nextIndex = 0;
+        }
+        showSlide(nextIndex);
+    }
+    
+    function prevSlide() {
+        let prevIndex = currentSlide - 1;
+        if (prevIndex < 0) {
+            prevIndex = slides.length - 1;
+        }
+        showSlide(prevIndex);
+    }
+    
+    function startAutoSlide() {
+        slideInterval = setInterval(nextSlide, slideDuration);
+    }
+    
+    function stopAutoSlide() {
+        clearInterval(slideInterval);
+    }
+    
+    // Initialize first slide
+    showSlide(0);
+    startAutoSlide();
+    
+    // Event listeners for navigation
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            prevSlide();
+            startAutoSlide();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            nextSlide();
+            startAutoSlide();
+        });
+    }
+    
+    // Event listeners for dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            stopAutoSlide();
+            showSlide(index);
+            startAutoSlide();
+        });
+    });
+    
+    // Pause auto-slide on hover
+    const testimonialSlider = document.querySelector('.testimonial-slider');
+    if (testimonialSlider) {
+        testimonialSlider.addEventListener('mouseenter', stopAutoSlide);
+        testimonialSlider.addEventListener('mouseleave', startAutoSlide);
+    }
+    
+    console.log('Testimonials carousel initialized successfully');
+}
+
+// ============================
+// ENHANCED CONTACT FORM WITH FORMSPREE
+// ============================
+function initContactForm() {
     const contactForm = document.getElementById('contactForm');
     if (!contactForm) {
-        console.log('Contact form not found - skipping enhanced form initialization');
+        console.log('Contact form not found - skipping form initialization');
         return;
     }
 
-    console.log('Initializing enhanced contact form...');
+    console.log('Initializing enhanced contact form with Formspree...');
 
     // Form elements
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
     const messageInput = document.getElementById('message');
+    const investmentSelect = document.getElementById('investmentAmount');
     const submitBtn = contactForm.querySelector('.btn-submit');
     const btnText = contactForm.querySelector('.btn-text');
     const btnLoader = contactForm.querySelector('.btn-loader');
@@ -446,6 +605,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Validation patterns
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phonePattern = /^[\+]?[1-9][\d]{0,15}$/;
+
+    // Set Formspree email dynamically
+    const replyToField = contactForm.querySelector('input[name="_replyto"]');
+    if (replyToField && emailInput) {
+        emailInput.addEventListener('input', function() {
+            replyToField.value = this.value;
+        });
+    }
 
     // Real-time validation for required fields
     if (nameInput && emailInput && messageInput) {
@@ -458,6 +625,14 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('blur', function() {
                 validateField(this);
             });
+        });
+    }
+
+    // Validate investment amount
+    if (investmentSelect) {
+        investmentSelect.addEventListener('change', function() {
+            validateField(this);
+            updateSubmitButton();
         });
     }
 
@@ -482,7 +657,7 @@ document.addEventListener('DOMContentLoaded', function() {
             field.classList.remove('error');
             errorElement.textContent = '';
 
-            if (!value) {
+            if (field.required && !value) {
                 field.classList.add('error');
                 errorElement.textContent = 'This field is required';
                 return false;
@@ -506,18 +681,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update submit button state
     function updateSubmitButton() {
-        if (!nameInput || !emailInput || !messageInput || !submitBtn) return;
+        if (!nameInput || !emailInput || !messageInput || !investmentSelect || !submitBtn) return;
         
         const isFormValid = 
             nameInput.value.trim() && 
             emailInput.value.trim() && 
             emailPattern.test(emailInput.value.trim()) && 
-            messageInput.value.trim().length >= 20;
+            messageInput.value.trim().length >= 20 &&
+            investmentSelect.value.trim();
         
         submitBtn.disabled = !isFormValid;
     }
 
-    // Form submission
+    // Form submission with Formspree
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -527,8 +703,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const isNameValid = validateField(nameInput);
         const isEmailValid = validateField(emailInput);
         const isMessageValid = validateField(messageInput);
+        const isInvestmentValid = validateField(investmentSelect);
         
-        if (!isNameValid || !isEmailValid || !isMessageValid) {
+        if (!isNameValid || !isEmailValid || !isMessageValid || !isInvestmentValid) {
             showMessage('Please fill in all required fields correctly.', 'error');
             return;
         }
@@ -541,35 +718,44 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
 
         // Collect form data
-        const formData = {
-            name: nameInput.value.trim(),
-            email: emailInput.value.trim(),
-            phone: phoneInput ? phoneInput.value.trim() : '',
-            message: messageInput.value.trim(),
-            investmentAmount: document.getElementById('investmentAmount') ? document.getElementById('investmentAmount').value : '',
-            timestamp: new Date().toISOString()
-        };
+        const formData = new FormData(contactForm);
+        
+        // Add timestamp
+        formData.append('_timestamp', new Date().toISOString());
+        formData.append('_page', window.location.href);
 
-        // Simulate form submission (replace with actual API call)
         try {
-            console.log('Submitting form data:', formData);
+            console.log('Submitting to Formspree...');
             
-            // For demo - simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1800));
+            // Submit to Formspree
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
             
-            // Success
-            showMessage('Thank you! Your consultation request has been sent. Our investment advisor will contact you within 24 hours.', 'success');
-            
-            // Log to console (for demo)
-            console.log('Form submitted successfully:', formData);
-            
-            // Reset form
-            contactForm.reset();
-            updateSubmitButton();
+            if (response.ok) {
+                // Success
+                showMessage('✅ Thank you! Your consultation request has been sent. Our investment advisor will contact you within 24 hours.', 'success');
+                console.log('Form submitted successfully to Formspree');
+                
+                // Reset form
+                contactForm.reset();
+                updateSubmitButton();
+                
+            } else {
+                // Formspree error
+                const errorData = await response.json();
+                console.error('Formspree error:', errorData);
+                showMessage('⚠️ Something went wrong with the submission. Please try again or contact us directly.', 'error');
+            }
             
         } catch (error) {
-            console.error('Form submission error:', error);
-            showMessage('Something went wrong. Please try again or contact us directly.', 'error');
+            console.error('Network error:', error);
+            showMessage('❌ Network error. Please check your connection and try again.', 'error');
+            
         } finally {
             // Reset button state
             if (btnText && btnLoader) {
@@ -588,15 +774,29 @@ document.addEventListener('DOMContentLoaded', function() {
         formMessage.className = 'form-message ' + type;
         formMessage.style.display = 'block';
         
-        // Hide message after 6 seconds
+        // Hide message after 8 seconds for success, 10 for error
+        const hideTime = type === 'success' ? 8000 : 10000;
         setTimeout(() => {
-            if (formMessage.className.includes('success')) {
-                formMessage.style.display = 'none';
-            }
-        }, 6000);
+            formMessage.style.display = 'none';
+        }, hideTime);
     }
 
     // Initialize button state
     updateSubmitButton();
-    console.log('Enhanced contact form initialized successfully');
+    console.log('Contact form with Formspree initialized successfully');
+}
+
+// ============================
+// INITIALIZE ALL FEATURES
+// ============================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Vaultaris Website - Initializing all features...');
+    
+    // Initialize all features
+    initDashboard();
+    initFAQAccordion();
+    initTestimonialsCarousel();
+    initContactForm();
+    
+    console.log('All features initialized successfully!');
 });
