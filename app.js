@@ -250,6 +250,8 @@ function displayResults(results, query) {
 }
 
 function showInitialMessage() {
+    if (!searchResults) return;
+    
     searchResults.innerHTML = `
         <div class="initial-message">
             <p><i class="fas fa-lightbulb"></i> Try searching for: 
@@ -263,7 +265,7 @@ function showInitialMessage() {
     document.querySelectorAll('.search-tag').forEach(tag => {
         tag.addEventListener('click', () => {
             const searchTerm = tag.getAttribute('data-search');
-            searchInput.value = searchTerm;
+            if (searchInput) searchInput.value = searchTerm;
             performSearch(searchTerm);
         });
     });
@@ -272,7 +274,7 @@ function showInitialMessage() {
 // Event listeners for search
 if (searchSubmit) {
     searchSubmit.addEventListener('click', () => {
-        performSearch(searchInput.value);
+        if (searchInput) performSearch(searchInput.value);
     });
 }
 
@@ -289,7 +291,7 @@ if (suggestionTags.length > 0) {
     suggestionTags.forEach(tag => {
         tag.addEventListener('click', () => {
             const searchTerm = tag.getAttribute('data-search');
-            searchInput.value = searchTerm;
+            if (searchInput) searchInput.value = searchTerm;
             performSearch(searchTerm);
         });
     });
@@ -316,88 +318,96 @@ function createCharts() {
     // Growth Chart (Line Chart)
     const growthCtx = document.getElementById('growthChart');
     if (growthCtx) {
-        new Chart(growthCtx.getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Portfolio Value',
-                    data: [100, 115, 125, 140, 155, 180, 195, 210, 230, 250, 270, 300],
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#667eea',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff'
-                    }
+        try {
+            new Chart(growthCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: [100, 115, 125, 140, 155, 180, 195, 210, 230, 250, 270, 300],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value + 'K';
-                            }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff'
                         }
                     },
-                    x: {
-                        grid: { display: false }
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'K';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
                     }
                 }
-            }
-        });
+            });
+        } catch (error) {
+            console.error('Error creating growth chart:', error);
+        }
     }
     
     // Allocation Chart (Doughnut Chart)
     const allocationCtx = document.getElementById('allocationChart');
     if (allocationCtx) {
-        new Chart(allocationCtx.getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Tech Stocks', 'Cryptocurrency', 'Real Estate', 'Bonds'],
-                datasets: [{
-                    data: [42, 28, 18, 12],
-                    backgroundColor: [
-                        '#667eea',
-                        '#10b981',
-                        '#f59e0b',
-                        '#8b5cf6'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.label + ': ' + context.parsed + '%';
+        try {
+            new Chart(allocationCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tech Stocks', 'Cryptocurrency', 'Real Estate', 'Bonds'],
+                    datasets: [{
+                        data: [42, 28, 18, 12],
+                        backgroundColor: [
+                            '#667eea',
+                            '#10b981',
+                            '#f59e0b',
+                            '#8b5cf6'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
                             }
                         }
-                    }
-                },
-                cutout: '70%'
-            }
-        });
+                    },
+                    cutout: '70%'
+                }
+            });
+        } catch (error) {
+            console.error('Error creating allocation chart:', error);
+        }
     }
     
     // Update metrics with live data (simulated)
@@ -408,18 +418,22 @@ function updateLiveMetrics() {
     // Simulate live updates
     const metrics = document.querySelectorAll('.metric-value');
     if (metrics.length > 0) {
-        // Random small fluctuations
-        setInterval(() => {
-            const change = (Math.random() * 0.5 - 0.25).toFixed(2);
-            metrics[0].textContent = `+${(1.24 + parseFloat(change)).toFixed(2)}%`;
-            
-            // Update dollar values based on percentage
-            const dollarChange = Math.floor(Math.random() * 5000 + 500);
-            const changeElements = document.querySelectorAll('.metric-change');
-            if (changeElements[0]) {
-                changeElements[0].textContent = `+$${(15280 + dollarChange).toLocaleString()}`;
-            }
-        }, 10000); // Update every 10 seconds
+        // Only set interval once
+        if (!window.metricInterval) {
+            window.metricInterval = setInterval(() => {
+                const change = (Math.random() * 0.5 - 0.25).toFixed(2);
+                if (metrics[0]) {
+                    metrics[0].textContent = `+${(1.24 + parseFloat(change)).toFixed(2)}%`;
+                }
+                
+                // Update dollar values based on percentage
+                const dollarChange = Math.floor(Math.random() * 5000 + 500);
+                const changeElements = document.querySelectorAll('.metric-change');
+                if (changeElements[0]) {
+                    changeElements[0].textContent = `+$${(15280 + dollarChange).toLocaleString()}`;
+                }
+            }, 10000); // Update every 10 seconds
+        }
     }
 }
 
@@ -436,23 +450,23 @@ function initFAQAccordion() {
             const question = item.querySelector('.faq-question');
             const answer = item.querySelector('.faq-answer');
             
-            question.addEventListener('click', () => {
-                // Close all other items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                        const otherAnswer = otherItem.querySelector('.faq-answer');
-                        if (otherAnswer) {
-                            otherAnswer.style.maxHeight = null;
+            if (question && answer) {
+                question.addEventListener('click', () => {
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                            const otherAnswer = otherItem.querySelector('.faq-answer');
+                            if (otherAnswer) {
+                                otherAnswer.style.maxHeight = null;
+                            }
                         }
-                    }
-                });
-                
-                // Toggle current item
-                const isActive = item.classList.contains('active');
-                item.classList.toggle('active');
-                
-                if (answer) {
+                    });
+                    
+                    // Toggle current item
+                    const isActive = item.classList.contains('active');
+                    item.classList.toggle('active');
+                    
                     if (!isActive) {
                         // Opening
                         answer.style.maxHeight = answer.scrollHeight + 'px';
@@ -460,15 +474,16 @@ function initFAQAccordion() {
                         // Closing
                         answer.style.maxHeight = null;
                     }
-                }
-            });
+                });
+            }
         });
         
         // Auto-open first question
         if (faqItems.length > 0) {
-            faqItems[0].classList.add('active');
-            const firstAnswer = faqItems[0].querySelector('.faq-answer');
-            if (firstAnswer) {
+            const firstItem = faqItems[0];
+            const firstAnswer = firstItem.querySelector('.faq-answer');
+            if (firstItem && firstAnswer) {
+                firstItem.classList.add('active');
                 firstAnswer.style.maxHeight = firstAnswer.scrollHeight + 'px';
             }
         }
@@ -486,7 +501,10 @@ function initTestimonialsCarousel() {
     const prevBtn = document.querySelector('.prev-btn');
     const nextBtn = document.querySelector('.next-btn');
     
-    if (slides.length === 0) return;
+    if (slides.length === 0) {
+        console.log('No testimonial slides found');
+        return;
+    }
     
     let currentSlide = 0;
     let slideInterval;
@@ -533,11 +551,16 @@ function initTestimonialsCarousel() {
     }
     
     function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, slideDuration);
+        if (!slideInterval) {
+            slideInterval = setInterval(nextSlide, slideDuration);
+        }
     }
     
     function stopAutoSlide() {
-        clearInterval(slideInterval);
+        if (slideInterval) {
+            clearInterval(slideInterval);
+            slideInterval = null;
+        }
     }
     
     // Initialize first slide
@@ -562,19 +585,25 @@ function initTestimonialsCarousel() {
     }
     
     // Event listeners for dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            stopAutoSlide();
-            showSlide(index);
-            startAutoSlide();
+    if (dots.length > 0) {
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                stopAutoSlide();
+                showSlide(index);
+                startAutoSlide();
+            });
         });
-    });
+    }
     
     // Pause auto-slide on hover
     const testimonialSlider = document.querySelector('.testimonial-slider');
     if (testimonialSlider) {
         testimonialSlider.addEventListener('mouseenter', stopAutoSlide);
         testimonialSlider.addEventListener('mouseleave', startAutoSlide);
+        
+        // Also pause on touch devices
+        testimonialSlider.addEventListener('touchstart', stopAutoSlide);
+        testimonialSlider.addEventListener('touchend', startAutoSlide);
     }
     
     console.log('Testimonials carousel initialized successfully');
@@ -604,19 +633,10 @@ function initContactForm() {
 
     // Validation patterns
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phonePattern = /^[\+]?[1-9][\d]{0,15}$/;
-
-    // Set Formspree email dynamically
-    const replyToField = contactForm.querySelector('input[name="_replyto"]');
-    if (replyToField && emailInput) {
-        emailInput.addEventListener('input', function() {
-            replyToField.value = this.value;
-        });
-    }
 
     // Real-time validation for required fields
-    if (nameInput && emailInput && messageInput) {
-        [nameInput, emailInput, messageInput].forEach(input => {
+    if (nameInput && emailInput && messageInput && investmentSelect) {
+        [nameInput, emailInput, messageInput, investmentSelect].forEach(input => {
             input.addEventListener('input', function() {
                 validateField(this);
                 updateSubmitButton();
@@ -625,26 +645,6 @@ function initContactForm() {
             input.addEventListener('blur', function() {
                 validateField(this);
             });
-        });
-    }
-
-    // Validate investment amount
-    if (investmentSelect) {
-        investmentSelect.addEventListener('change', function() {
-            validateField(this);
-            updateSubmitButton();
-        });
-    }
-
-    // Optional phone validation
-    const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function() {
-            if (this.value.trim() && !phonePattern.test(this.value.replace(/[\s\(\)\-]/g, ''))) {
-                this.style.borderColor = '#ffa502';
-            } else {
-                this.style.borderColor = '#e1e5e9';
-            }
         });
     }
 
@@ -663,13 +663,13 @@ function initContactForm() {
                 return false;
             }
 
-            if (field.type === 'email' && !emailPattern.test(value)) {
+            if (field.type === 'email' && value && !emailPattern.test(value)) {
                 field.classList.add('error');
                 errorElement.textContent = 'Please enter a valid email address';
                 return false;
             }
 
-            if (field.id === 'message' && value.length < 20) {
+            if (field.id === 'message' && value && value.length < 20) {
                 field.classList.add('error');
                 errorElement.textContent = 'Please provide more details (at least 20 characters)';
                 return false;
@@ -715,19 +715,14 @@ function initContactForm() {
             btnText.style.display = 'none';
             btnLoader.style.display = 'inline-block';
         }
-        submitBtn.disabled = true;
-
-        // Collect form data
-        const formData = new FormData(contactForm);
-        
-        // Add timestamp
-        formData.append('_timestamp', new Date().toISOString());
-        formData.append('_page', window.location.href);
+        if (submitBtn) submitBtn.disabled = true;
 
         try {
             console.log('Submitting to Formspree...');
             
-            // Submit to Formspree
+            // Submit to Formspree using FormData
+            const formData = new FormData(contactForm);
+            
             const response = await fetch(contactForm.action, {
                 method: 'POST',
                 body: formData,
@@ -747,8 +742,7 @@ function initContactForm() {
                 
             } else {
                 // Formspree error
-                const errorData = await response.json();
-                console.error('Formspree error:', errorData);
+                console.error('Formspree error response:', response.status);
                 showMessage('⚠️ Something went wrong with the submission. Please try again or contact us directly.', 'error');
             }
             
@@ -762,7 +756,7 @@ function initContactForm() {
                 btnText.style.display = 'inline-block';
                 btnLoader.style.display = 'none';
             }
-            submitBtn.disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
         }
     });
 
@@ -789,14 +783,22 @@ function initContactForm() {
 // ============================
 // INITIALIZE ALL FEATURES
 // ============================
-document.addEventListener('DOMContentLoaded', function() {
+function initializeAllFeatures() {
     console.log('Vaultaris Website - Initializing all features...');
     
-    // Initialize all features
+    // Initialize features in order
     initDashboard();
     initFAQAccordion();
     initTestimonialsCarousel();
     initContactForm();
     
     console.log('All features initialized successfully!');
-});
+}
+
+// Initialize when DOM is fully loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAllFeatures);
+} else {
+    // DOM already loaded
+    initializeAllFeatures();
+                              }
