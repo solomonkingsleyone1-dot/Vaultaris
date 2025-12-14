@@ -1,4 +1,3 @@
-
 // ============================
 // UTILITY FUNCTIONS
 // ============================
@@ -392,10 +391,10 @@ function initInvestmentLaunchpad() {
     const customAmountInput = document.getElementById('customAmount');
     const summaryAmount = document.getElementById('summaryAmount');
     const summaryProjection = document.getElementById('summaryProjection');
-    const calcInitial = document.getElementById('calcInitial');
-    const calcCurrent = document.getElementById('calcCurrent');
-    const calcReturn = document.getElementById('calcReturn');
-    const calcDaily = document.getElementById('calcDaily');
+    const calcInitialLaunchpad = document.getElementById('calcInitial'); // Investment Launchpad calculator
+    const calcCurrentLaunchpad = document.getElementById('calcCurrent'); // Investment Launchpad calculator
+    const calcReturnLaunchpad = document.getElementById('calcReturn'); // Investment Launchpad calculator
+    const calcDailyLaunchpad = document.getElementById('calcDaily'); // Investment Launchpad calculator
     const toggleButtons = document.querySelectorAll('.toggle-btn');
     const strategyOptions = document.querySelectorAll('.strategy-option');
     const summaryStrategy = document.getElementById('summaryStrategy');
@@ -505,11 +504,11 @@ function initInvestmentLaunchpad() {
         if (summaryReturns) summaryReturns.textContent = `+${totalReturn.toFixed(1)}%`;
         if (summaryProjection) summaryProjection.textContent = `$${projectedValue.toFixed(2)}`;
         
-        // Update calculator
-        if (calcInitial) calcInitial.textContent = `$${selectedAmount.toLocaleString()}`;
-        if (calcCurrent) calcCurrent.textContent = `$${projectedValue.toFixed(2)}`;
-        if (calcReturn) calcReturn.textContent = `+${totalReturn.toFixed(1)}%`;
-        if (calcDaily) calcDaily.textContent = `+${dailyReturn.toFixed(2)}%`;
+        // Update calculator (Investment Launchpad)
+        if (calcInitialLaunchpad) calcInitialLaunchpad.textContent = `$${selectedAmount.toLocaleString()}`;
+        if (calcCurrentLaunchpad) calcCurrentLaunchpad.textContent = `$${projectedValue.toFixed(2)}`;
+        if (calcReturnLaunchpad) calcReturnLaunchpad.textContent = `+${totalReturn.toFixed(1)}%`;
+        if (calcDailyLaunchpad) calcDailyLaunchpad.textContent = `+${dailyReturn.toFixed(2)}%`;
         
         // Enable/disable start button
         if (startInvestmentBtn) {
@@ -588,7 +587,7 @@ function initDashboard() {
     // Create charts if Chart.js is loaded
     if (window.Chart) {
         createCharts();
-        initInvestmentCalculator();
+        initDashboardInvestmentCalculator(); // Changed function name to avoid conflict
     } else {
         // Wait for Chart.js to load
         setTimeout(initDashboard, 100);
@@ -728,14 +727,14 @@ function updateLiveMetrics() {
     }
 }
 
-// Investment Calculator - FIXED VERSION
-function initInvestmentCalculator() {
+// Dashboard Investment Calculator - FIXED VERSION (using Dashboard IDs)
+function initDashboardInvestmentCalculator() {
     const investmentSelect = document.getElementById('investmentAmount');
     const calculatorResults = document.getElementById('calculatorResults');
-    const calcInitial = document.getElementById('calcInitial');
-    const calcCurrent = document.getElementById('calcCurrent');
-    const calcReturn = document.getElementById('calcReturn');
-    const calcDaily = document.getElementById('calcDaily');
+    const calcInitialDashboard = document.getElementById('calcInitialDashboard');
+    const calcCurrentDashboard = document.getElementById('calcCurrentDashboard');
+    const calcReturnDashboard = document.getElementById('calcReturnDashboard');
+    const calcDailyDashboard = document.getElementById('calcDailyDashboard');
     const dailyValues = document.getElementById('dailyValues');
     
     if (investmentSelect && calculatorResults) {
@@ -747,11 +746,11 @@ function initInvestmentCalculator() {
                 const finalValue = value * (1 + 1.7/100);
                 const dailyGain = value * (dailyReturn/100);
                 
-                // Update display
-                if (calcInitial) calcInitial.textContent = `$${value.toLocaleString()}`;
-                if (calcCurrent) calcCurrent.textContent = `$${finalValue.toFixed(2)}`;
-                if (calcReturn) calcReturn.textContent = `+1.7%`;
-                if (calcDaily) calcDaily.textContent = `+${dailyReturn.toFixed(2)}%`;
+                // Update display (Dashboard calculator)
+                if (calcInitialDashboard) calcInitialDashboard.textContent = `$${value.toLocaleString()}`;
+                if (calcCurrentDashboard) calcCurrentDashboard.textContent = `$${finalValue.toFixed(2)}`;
+                if (calcReturnDashboard) calcReturnDashboard.textContent = `+1.7%`;
+                if (calcDailyDashboard) calcDailyDashboard.textContent = `+${dailyReturn.toFixed(2)}%`;
                 
                 // Generate daily values
                 if (dailyValues) {
@@ -1187,22 +1186,39 @@ function initTooltips() {
 }
 
 // ============================
+// MEMORY MANAGEMENT
+// ============================
+function cleanupIntervals() {
+    if (window.metricInterval) {
+        clearInterval(window.metricInterval);
+        window.metricInterval = null;
+    }
+}
+
+// Add cleanup when leaving page
+window.addEventListener('beforeunload', cleanupIntervals);
+
+// ============================
 // INITIALIZE ALL FEATURES
 // ============================
 function initializeAllFeatures() {
     console.log('Vaultaris Website - Initializing all features...');
     
-    // Initialize features in order
-    updateActiveNavLink(); // Initial active nav link
-    initDashboard();
-    initInvestmentLaunchpad(); // NEW: Investment launchpad
-    initFAQAccordion();
-    initTestimonialsCarousel();
-    initContactForm();
-    initTooltips();
-    initInvestmentCalculator();
-    
-    console.log('All features initialized successfully!');
+    try {
+        // Initialize features in order
+        updateActiveNavLink(); // Initial active nav link
+        initDashboard();
+        initInvestmentLaunchpad(); // Investment launchpad
+        initFAQAccordion();
+        initTestimonialsCarousel();
+        initContactForm();
+        initTooltips();
+        
+        console.log('All features initialized successfully!');
+    } catch (error) {
+        console.error('Error initializing features:', error);
+        showNotification('Website features failed to load. Please refresh.', 'error');
+    }
 }
 
 // Initialize when DOM is fully loaded
@@ -1211,4 +1227,4 @@ if (document.readyState === 'loading') {
 } else {
     // DOM already loaded
     initializeAllFeatures();
-    }
+            }
