@@ -22,6 +22,47 @@ if (menuBtn && navLinks) {
 }
 
 // ============================
+// ACTIVE NAV LINK ON SCROLL
+// ============================
+function updateActiveNavLink() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    let current = '';
+    const scrollPos = window.scrollY + 100;
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', updateActiveNavLink);
+
+// ============================
+// SCROLL PROGRESS INDICATOR
+// ============================
+const scrollProgress = document.getElementById('scrollProgress');
+if (scrollProgress) {
+    window.addEventListener('scroll', () => {
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight) * 100;
+        scrollProgress.style.width = `${scrolled}%`;
+    });
+}
+
+// ============================
 // SMOOTH SCROLL
 // ============================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -49,16 +90,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================
 const backToTopBtn = document.getElementById('backToTopBtn');
 if (backToTopBtn) {
-    // Show the button when user scrolls down 300px
     window.addEventListener('scroll', function() {
         if (window.scrollY > 300) {
-            backToTopBtn.style.display = 'flex';
+            backToTopBtn.classList.add('show');
         } else {
-            backToTopBtn.style.display = 'none';
+            backToTopBtn.classList.remove('show');
         }
     });
 
-    // Smooth scroll to top when clicked
     backToTopBtn.addEventListener('click', function(e) {
         e.preventDefault();
         window.scrollTo({
@@ -66,6 +105,22 @@ if (backToTopBtn) {
             behavior: 'smooth'
         });
     });
+}
+
+// ============================
+// NOTIFICATION TOAST
+// ============================
+function showNotification(message, type = 'success') {
+    const toast = document.getElementById('notificationToast');
+    if (!toast) return;
+    
+    toast.textContent = message;
+    toast.className = `notification-toast ${type}`;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
 }
 
 // ============================
@@ -97,12 +152,12 @@ if (messageForm) {
         const message = textarea.value.trim();
         
         if (message) {
-            alert('✅ Message sent to DeepSeek! We\'ll respond soon.');
+            showNotification('✅ Message sent to DeepSeek! We\'ll respond soon.', 'success');
             textarea.value = '';
             messageModal.style.display = 'none';
             document.body.style.overflow = 'auto';
         } else {
-            alert('Please type a message first.');
+            showNotification('Please type a message first.', 'error');
         }
     });
 }
@@ -142,6 +197,18 @@ const searchDatabase = [
         description: "Average annual returns of +24% with consistent growth.",
         category: "Performance",
         keywords: ["returns", "performance", "growth", "24%"]
+    },
+    {
+        title: "Minimum Investment",
+        description: "Start investing from just $50 with our flexible plans.",
+        category: "FAQ",
+        keywords: ["minimum", "investment", "$50", "start"]
+    },
+    {
+        title: "Security & Insurance",
+        description: "All client assets are held with SIPC-insured custodians.",
+        category: "FAQ",
+        keywords: ["security", "insurance", "SIPC", "protection"]
     }
 ];
 
@@ -229,13 +296,13 @@ function displayResults(results, query) {
         searchResults.innerHTML = `
             <div class="no-results">
                 <h4><i class="fas fa-search"></i> No results found for "${query}"</h4>
-                <p>Try different keywords.</p>
+                <p>Try different keywords or browse our suggestions below.</p>
             </div>
         `;
         return;
     }
     
-    let html = `<div class="result-count">Found ${results.length} result${results.length !== 1 ? 's' : ''}</div>`;
+    let html = `<div class="result-count">Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"</div>`;
     results.forEach(result => {
         html += `
             <div class="result-item">
@@ -255,9 +322,9 @@ function showInitialMessage() {
     searchResults.innerHTML = `
         <div class="initial-message">
             <p><i class="fas fa-lightbulb"></i> Try searching for: 
-            <span class="search-tag" data-search="portfolio">"portfolio management"</span>, 
-            <span class="search-tag" data-search="market">"market research"</span>, 
-            <span class="search-tag" data-search="risk">"risk analysis"</span></p>
+            <button class="search-tag" data-search="portfolio">"portfolio management"</button>, 
+            <button class="search-tag" data-search="market">"market research"</button>, 
+            <button class="search-tag" data-search="risk">"risk analysis"</button></p>
         </div>
     `;
     
@@ -308,6 +375,7 @@ function initDashboard() {
     // Create charts if Chart.js is loaded
     if (window.Chart) {
         createCharts();
+        initInvestmentCalculator();
     } else {
         // Wait for Chart.js to load
         setTimeout(initDashboard, 100);
@@ -345,7 +413,12 @@ function createCharts() {
                         tooltip: {
                             backgroundColor: 'rgba(0, 0, 0, 0.7)',
                             titleColor: '#fff',
-                            bodyColor: '#fff'
+                            bodyColor: '#fff',
+                            callbacks: {
+                                label: function(context) {
+                                    return `$${context.parsed.y}K`;
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -423,16 +496,54 @@ function updateLiveMetrics() {
             window.metricInterval = setInterval(() => {
                 const change = (Math.random() * 0.5 - 0.25).toFixed(2);
                 if (metrics[0]) {
-                    metrics[0].textContent = `+${(1.24 + parseFloat(change)).toFixed(2)}%`;
+                    const currentValue = parseFloat(metrics[0].textContent.replace('+', '').replace('%', ''));
+                    const newValue = currentValue + parseFloat(change);
+                    metrics[0].textContent = `${newValue >= 0 ? '+' : ''}${newValue.toFixed(2)}%`;
+                    metrics[0].className = `metric-value ${newValue >= 0 ? 'positive' : ''}`;
                 }
                 
                 // Update dollar values based on percentage
                 const dollarChange = Math.floor(Math.random() * 5000 + 500);
                 const changeElements = document.querySelectorAll('.metric-change');
                 if (changeElements[0]) {
-                    changeElements[0].textContent = `+$${(15280 + dollarChange).toLocaleString()}`;
+                    const currentDollar = parseInt(changeElements[0].textContent.replace('+$', '').replace(',', ''));
+                    const newDollar = currentDollar + dollarChange;
+                    changeElements[0].textContent = `+$${newDollar.toLocaleString()}`;
                 }
             }, 10000); // Update every 10 seconds
+        }
+    }
+}
+
+// Investment Calculator
+function initInvestmentCalculator() {
+    const investmentSelect = document.getElementById('investmentAmount');
+    const calculatorResults = document.getElementById('calculatorResults');
+    const calcInitial = document.getElementById('calcInitial');
+    const calcProjection = document.getElementById('calcProjection');
+    
+    if (investmentSelect && calculatorResults) {
+        investmentSelect.addEventListener('change', function() {
+            const value = parseFloat(this.value);
+            if (!isNaN(value) && value > 0) {
+                // Calculate 5-year projection with 25% annual return
+                const projection = Math.round(value * Math.pow(1.25, 5));
+                
+                calcInitial.textContent = `$${value.toLocaleString()}`;
+                calcProjection.textContent = `$${projection.toLocaleString()}`;
+                
+                calculatorResults.classList.add('show');
+                
+                // Show notification
+                showNotification(`💰 Projection calculated: $${value} → $${projection} in 5 years`, 'success');
+            } else {
+                calculatorResults.classList.remove('show');
+            }
+        });
+        
+        // Initialize with default value
+        if (investmentSelect.value) {
+            investmentSelect.dispatchEvent(new Event('change'));
         }
     }
 }
@@ -648,13 +759,16 @@ function initContactForm() {
         });
     }
 
-    // Field validation
+    // Field validation with success state
     function validateField(field) {
         const value = field.value.trim();
         const errorElement = document.getElementById(field.id + 'Error');
+        const formGroup = field.closest('.form-group');
         
-        if (errorElement) {
+        if (errorElement && formGroup) {
+            // Reset states
             field.classList.remove('error');
+            formGroup.classList.remove('success');
             errorElement.textContent = '';
 
             if (field.required && !value) {
@@ -673,6 +787,11 @@ function initContactForm() {
                 field.classList.add('error');
                 errorElement.textContent = 'Please provide more details (at least 20 characters)';
                 return false;
+            }
+
+            // If field is valid and has value, add success state
+            if (value) {
+                formGroup.classList.add('success');
             }
         }
 
@@ -736,19 +855,29 @@ function initContactForm() {
                 showMessage('✅ Thank you! Your consultation request has been sent. Our investment advisor will contact you within 24 hours.', 'success');
                 console.log('Form submitted successfully to Formspree');
                 
+                // Show toast notification
+                showNotification('✅ Consultation request sent successfully!', 'success');
+                
                 // Reset form
                 contactForm.reset();
                 updateSubmitButton();
+                
+                // Remove success states
+                document.querySelectorAll('.form-group.success').forEach(group => {
+                    group.classList.remove('success');
+                });
                 
             } else {
                 // Formspree error
                 console.error('Formspree error response:', response.status);
                 showMessage('⚠️ Something went wrong with the submission. Please try again or contact us directly.', 'error');
+                showNotification('⚠️ Submission failed. Please try again.', 'error');
             }
             
         } catch (error) {
             console.error('Network error:', error);
             showMessage('❌ Network error. Please check your connection and try again.', 'error');
+            showNotification('❌ Network error. Please check your connection.', 'error');
             
         } finally {
             // Reset button state
@@ -781,16 +910,56 @@ function initContactForm() {
 }
 
 // ============================
+// TOOLTIP FUNCTIONALITY
+// ============================
+function initTooltips() {
+    const tooltips = document.querySelectorAll('.tooltip');
+    tooltips.forEach(tooltip => {
+        tooltip.addEventListener('mouseenter', function() {
+            const tooltipText = this.querySelector('.tooltip-text');
+            if (tooltipText) {
+                tooltipText.style.visibility = 'visible';
+                tooltipText.style.opacity = '1';
+            }
+        });
+        
+        tooltip.addEventListener('mouseleave', function() {
+            const tooltipText = this.querySelector('.tooltip-text');
+            if (tooltipText) {
+                tooltipText.style.visibility = 'hidden';
+                tooltipText.style.opacity = '0';
+            }
+        });
+        
+        // For touch devices
+        tooltip.addEventListener('click', function(e) {
+            if (window.innerWidth < 768) {
+                e.preventDefault();
+                const tooltipText = this.querySelector('.tooltip-text');
+                if (tooltipText) {
+                    const isVisible = tooltipText.style.visibility === 'visible';
+                    tooltipText.style.visibility = isVisible ? 'hidden' : 'visible';
+                    tooltipText.style.opacity = isVisible ? '0' : '1';
+                }
+            }
+        });
+    });
+}
+
+// ============================
 // INITIALIZE ALL FEATURES
 // ============================
 function initializeAllFeatures() {
     console.log('Vaultaris Website - Initializing all features...');
     
     // Initialize features in order
+    updateActiveNavLink(); // Initial active nav link
     initDashboard();
     initFAQAccordion();
     initTestimonialsCarousel();
     initContactForm();
+    initTooltips();
+    initInvestmentCalculator();
     
     console.log('All features initialized successfully!');
 }
@@ -801,4 +970,4 @@ if (document.readyState === 'loading') {
 } else {
     // DOM already loaded
     initializeAllFeatures();
-                              }
+            }
