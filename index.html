@@ -364,6 +364,7 @@
                 <input type="hidden" name="_subject" value="New Consultation Request - Vaultaris">
                 <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="_replyto" value="%email%">
+                <input type="hidden" name="_language" value="en">
                 
                 <div class="form-group">
                     <label for="name">Full Name *</label>
@@ -412,13 +413,13 @@
                 </div>
                 
                 <!-- Honeypot field for spam prevention -->
-                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                <div class="honeypot" aria-hidden="true">
                     <input type="text" name="_gotcha" tabindex="-1">
                 </div>
                 
                 <button type="submit" class="btn-submit">
                     <span class="btn-text">Get Free Consultation</span>
-                    <span class="btn-loader" style="display: none;">Sending...</span>
+                    <span class="btn-loader">Sending...</span>
                 </button>
                 
                 <div class="form-message" id="formMessage"></div>
@@ -434,9 +435,9 @@
             <div class="logo">Vaultaris</div>
             <p>Smart investments for a secure future.</p>
             <div class="social">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
             <p class="copyright">© 2025 Vaultaris. All rights reserved.<br>
             Investment involves risk. Past performance is not indicative of future results.</p>
@@ -479,8 +480,8 @@
         <p class="search-subtitle">AI-powered search for smarter results</p>
         
         <div class="search-input-container">
-          <input type="text" id="searchInput" placeholder="What are you looking for? (e.g., investment strategies, risk analysis, returns...)">
-          <button id="searchSubmit" class="search-submit-btn">
+          <input type="text" id="searchInput" placeholder="What are you looking for? (e.g., investment strategies, risk analysis, returns...)" aria-label="Search input">
+          <button id="searchSubmit" class="search-submit-btn" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
         </div>
@@ -506,4 +507,4 @@
 
     <script src="app.js"></script>
 </body>
-                                                            </html>
+    </html>
